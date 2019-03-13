@@ -1,44 +1,28 @@
-const uWS = require('./node_modules/uWebSockets.js');
+const uWS = require("uWebSockets.js")
+// const validator = require('validator');
+// const port = 3000;
+var routes = require("./routes/Routes");
+const {Pool} = require("pg");
 
-const port = 3000;
-const fs = require("fs");
-
-
-var content = fs.readFileSync("./mainPages/homepage.html", {encoding: 'utf-8'});
-
-const app = uWS.App().get('/*', (res, req) =>{
-    res.writeHeader("Content-Type","text/html; charset=utf-8");
-    res.end(fs.readFileSync("./mainPages/homepage.html", {encoding: 'utf-8'}));
-}).listen(port, (token) =>{
-    if(token){
-        console.log("Listening on port " + port);
-    }else{
-        console.log("something bad happened");
-    }
+const pool = new Pool({
+    user: 'postgres',
+    host: '192.250.230.169',
+    database: 'ditto',
+    password: 'Noderink1',
+    port: 5432,
 })
 
 
-
-
-// app.use(express.static(path.join(__dirname + './mainPages')));
-
-
-// //homepage
-// // app.set('views', "./mainPages");
-
-// app.get("/", function(req, res){
-//     res.render("homepage.html");
-// });
+var app = uWS.App();
+app = new routes.GetRoutes(app, pool).attachGetRoutes();
 
 
 
 
-// //initial connection
-// var port = 3000;
-// app.listen(port, function(err, connect){
-//     if(err){
-//         console.log(err);
-//     }else{
-//         console.log("Connected to port " + port);
-//     }
-// });
+app.listen(3000, (token) => {
+    if(token){
+      console.log("listening on 3000");
+    }else{
+      console.log("idk ");
+    }
+  })
