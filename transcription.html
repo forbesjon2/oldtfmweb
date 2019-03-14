@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>someText.fm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- browser tab icon -->
+    <!-- <link rel="icon" href="https://icon.cat/img/comingsoon.png"> -->
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600" rel="stylesheet"> 
+    
+    <!-- icons -->
+    <link href="https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <!-- bootstrap js -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+
+</head>
+<body>
+    <!-- navbar -->
+<div class="fixed-top container-flex shadow p-1 mb-5 bg-white rounded">
+    <div class="row">
+        <div class="col-lg-3 col-md-3 d-none d-md-block leftTitle" style="transform:rotate(0);">
+            someText.fm
+            <a href="#" class="stretched-link"></a>
+        </div>
+
+        <div id="navcenter" class="col-lg-6 col-md-6 centerTitle">{{title}}</div>
+        
+        <div id="navright" class="col-lg-3 col-md-3 d-none d-md-block rightTitle" style="transform:rotate(0);">
+            <img src="https://www.omnycontent.com/d/playlist/a7b0bd27-d748-4fbe-ab3b-a6fa0049bcf6/392196e7-87cf-4af5-b31b-a89c01057741/2bab9367-8229-4d22-ad4c-a89c01057758/image.jpg?t=1520474383&size=Small" style="width:20px; height:20px"/>
+            {{title}}
+            <a href="#" class="stretched-link"></a>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+
+<!-- Floating container -->
+<div id="floatingContainer" class="position-fixed container">
+    <div class="mx-auto row"><i class="icon ion-ios-share-alt"></i></div>
+    <div class="floatingTextShare mb-4 row">Share</div>
+    <div class="mx-auto row"><i class="icon ion-ios-timer"></i></div>
+    <div class="floatingTextTimer row">0:00</div>
+</div>
+
+<!-- Description -->
+<div id="description" class="container content">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-5 col-6">
+            <img id="mainIMG" src="https://www.omnycontent.com/d/playlist/a7b0bd27-d748-4fbe-ab3b-a6fa0049bcf6/392196e7-87cf-4af5-b31b-a89c01057741/2bab9367-8229-4d22-ad4c-a89c01057758/image.jpg?t=1520474383&size=Small" class="img-fluid" alt="Responsive image"/>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-7 col-6 ">
+            <div id="descTitle" class="row ">{{title}}</div>
+            <div id="descContent" class="row">{{content}}</div>
+        </div>
+    </div>
+    <div id="subDesc" class="mt-4 col">
+        <div class="row">Date: {{date}}</div>
+        <div class="row">Views: {{views}}</div>
+    </div>
+    
+</div>
+<br>
+<br>
+<br>
+
+<!-- Transcription -->
+<div class="container content">
+    <div id="main">
+        <span v-for="(item, index) in content"  v-bind:wi="index" @mouseover="mouseover">{{item.w}} </span>
+    </div>        
+</div>
+
+
+
+
+
+
+<style>
+.leftTitle{
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 2vw;
+    font-size: 4vmax;
+    font-size: 2vmin;
+    text-align: right;
+    align-self: center;
+    padding-right: 5%;
+}
+.centerTitle{
+    font-family: 'Source Serif Pro', serif;
+    font-size:100%;
+    text-align: center;
+    align-self: center;
+
+}
+.rightTitle{
+    font-family: 'Merriweather', serif;
+    font-size: 2vw;
+    font-size: 4vmax;
+    font-size: 2vmin;
+    font-weight:400;
+    text-align: center;
+    align-self: center;
+}
+.content{
+    font-family: 'Source Serif Pro', serif;
+    font-size: 14px;
+    font-weight:400;
+}
+#descTitle{
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 4vw;
+    font-size: 8vmax;
+    font-size: 4vmin;
+    margin-bottom: 5%;
+    
+}
+#descContent{
+    font-family: 'Source Serif Pro', serif;
+    font-size: 14px;
+    font-weight:400;
+}
+#mainIMG{
+    box-shadow: 7px 7px 20px #00000025;
+}
+#subDesc{
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 100%;
+}
+#floatingContainer{
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    margin-left: 20px;
+    font-family: 'Merriweather', serif;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+
+.floatingTextTimer{
+    margin-left: -4px;
+}
+.floatingTextShare{
+    margin-left: -9px;
+}
+.ion-ios-share-alt{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 0.7;
+    color: black;
+}
+.ion-ios-share-alt:hover{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 1;
+    color: black;
+}
+.ion-ios-timer:before{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 0.7;
+    color: black;
+}
+.ion-ios-timer:before:hover{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 1;
+    color: black;
+}
+
+</style>
+
+
+<script>
+// Event listeners
+function archaic(num){
+    document.querySelector(".floatingTextTimer").textContent = "0:0" + num;
+}
+
+
+// Vue.js stuff
+new Vue({
+    created(){
+        //this is where you make server requests
+        //you need transcription, description, and duration (2 possibilities)
+        self = this;
+        new XMLHttpRequest()
+    },
+    el:'#main',
+    data:{
+        centerTitle:'ss',
+        content: [],
+        wpm: 0,
+        duration:0,
+    },
+    methods:{
+        mouseover: function(event){
+            var elapsedTime = (event.srcElement.attributes.wi.value / this.wpm);
+            var minute =  Math.round(elapsedTime % 60);
+            if(minute.toString().length == 1){
+                document.querySelector(".floatingTextTimer").textContent = Math.floor(elapsedTime / 60) + ":0" + minute;
+                return;
+            }else{
+                document.querySelector(".floatingTextTimer").textContent = Math.floor(elapsedTime / 60) + ":" + minute;
+                return;
+            }
+            
+        }
+    }
+});
+
+
+
+
+new Vue({
+    el:'#description',
+    data:{
+        title: "10-30-17 mark levin audio rewind",
+        date: "ss",
+        views: "22",
+        content: "On Friday’s Mark Levin show, there are some in the Democrat Party claiming they will use democratic socialism to run America. This will never succeed because it’s tyranny; what will succeed is liberty. I Pencil and Milton Friedman are the best ways to explain our economy. When you hear this think of how hard it is to run an economy and who in federal government will run our healthcare system? We need to fight for what belongs to us, fight against democratic socialism which should be called police state socialism. Also, the democrats have their sights on President Trump’s financial info and his children. Trump must say no and bring this all the way to the Supreme Court. Later, it's been 2 years of the Russian investigations and we have had nothing come from it. None of the arrests or criminal proceedings have been related to the President and any sort of collusion. Finally, just weeks before the FBI raided Michael Cohen office, he pitched a book praising Trump. He painted Trump in a positive light by saying the President wasn’t dumb, crazy or a liar.",
+    }
+});
+new Vue({
+    //Scroll middle title change effect https://vuejs.org/v2/cookbook/creating-custom-scroll-directives.html#ad
+    el:'#navcenter',
+    data:{
+        title: "10-30-17 mark levin audio rewind",
+        main: "fuck"
+    }
+});
+new Vue({
+    el:'#navright',
+    data:{
+        title: "Mark Levin Audio Rewind",
+    }
+});
+        
+        
+// window.setInterval(function(){
+//     location.reload();
+// }, 1500);
+</script>
+</body>
+</html>

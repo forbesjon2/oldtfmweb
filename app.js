@@ -1,5 +1,4 @@
 const uWS = require("uWebSockets.js")
-// const validator = require('validator');
 // const port = 3000;
 var routes = require("./routes/Routes");
 const {Pool} = require("pg");
@@ -14,6 +13,7 @@ const pool = new Pool({
 
 
 var app = uWS.App();
+
 app = new routes.GetRoutes(app, pool).attachGetRoutes();
 
 
