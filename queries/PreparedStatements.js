@@ -5,20 +5,7 @@
  */
 const validator = require('validator');
 // ------------------query return fields
-// command
-// rowCount
-// oid
-// rows
-// fields
-// _parsers
-// RowCtor
-// rowAsArray
-// _getTypeParser
-// addCommandComplete
-// _parseRowAsArray
-// parseRow
-// addRow
-// addFields
+// command, rowCount, oid, rows, fields, _parsers, RowCtor, rowAsArray, _getTypeParser, addCommandComplete, _parseRowAsArray, parseRow, addRow, addFields
 
 /**
  * This returns an array (as string) of index values that match the query provided
