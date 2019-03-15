@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>transcript.fm</title>
     
     <!-- Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -32,9 +32,8 @@
 
     <div class="col-fluid">
         <div class="align-items-end input-group markermal">
-            <input type="text" onclick="search(this);" onblur="endSearch(this);" >
-                <i class="icon ion-ios-search" id="ip"></i>
-
+            <input type="text" onclick="toggleSearch(this);" onblur="toggleEndSearch(this);" onkeyup="enterKeyPress(event);">
+                <i class="icon ion-ios-search" onclick=""></i>
         </div>
     </div>
 
@@ -53,11 +52,10 @@ a:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: 
     width: 2em;
     opacity: 1;
 }        
-i{margin-left: -30px;float: right;margin-bottom: 15px;}
+i{margin-left: -30px;float: right;margin-bottom: 15px;transition: 1s;}
 .ion-ios-search:before{font-size: 22px;color: black;}
-input::-ms-clear{
-    display: none;
-}
+input::-ms-clear{display: none;}
+
 input{
     -webkit-appearance: none;
     font-family: 'Merriweather', serif;
@@ -72,11 +70,10 @@ input{
     padding-right: 2px;
     border-style: solid;
     border-width: 0px 0px 1px 0px;
-}
-input:focus, .fuck:focus{
-    margin-bottom: 200px;
     transition: 1s;
 }
+.selectedInput{margin-bottom: 200px;transition: 1s;}
+.selectedIcon{margin-bottom: 215px;transition: 1s;}
 
 .menubarText{
     font-family: 'Didact Gothic', sans-serif;
@@ -95,15 +92,27 @@ input:focus, .fuck:focus{
 
 <!-- Vue -->
 <script>
-function search(event){
-    var navBar = document.querySelector("#navBar").classList.add("invisible");
-    var searchIcon = document.querySelector("i");
-    // get both, add a class that transitions it to a position
-    // document.querySelector(".markermal").sty
+function toggleSearch(event){
+    document.querySelector("#navBar").classList.add("invisible");
+    document.querySelector("i").classList.add("selectedIcon");
+    document.querySelector("input").classList.add("selectedInput");
 }
-function endSearch(event){
-    var navBar = document.querySelector("#navBar").classList.remove("invisible");
+function enterKeyPress(event){
+    if(event.keyCode == 13 || event.key == "Enter"){
+        window.location.href = "/search/" + document.querySelector("input").value;
+    }
+}
 
+
+function search(query){
+    
+    window.location.href = "/search/" + document.querySelector("input").value;
+}
+
+function toggleEndSearch(event){
+    document.querySelector("#navBar").classList.remove("invisible");
+    document.querySelector("i").classList.remove("selectedIcon");
+    document.querySelector("input").classList.remove("selectedInput");
 }
 // window.setInterval(function(){
 //     location.reload();

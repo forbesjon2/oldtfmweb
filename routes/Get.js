@@ -3,7 +3,6 @@ var fs = require("fs");
 
 class Routes{
     constructor(webServer, pool){
-        console.log("inside routes");
         this.webServer = webServer;
         this.pool = pool;
     }
@@ -31,7 +30,14 @@ class Routes{
         })
 
                 
-
+        this.webServer.get("/search/:query", (res, req) =>{
+            res.onAborted(()=>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Search.html", {encoding: 'utf-8'}));
+            }
+        })
 
         this.webServer.get("/w/:id", (res,req) => {
             res.onAborted(() =>{
