@@ -1,3 +1,6 @@
+var fs = require("fs");
+
+
 class Routes{
     constructor(webServer, pool){
         console.log("inside routes");
@@ -6,9 +9,15 @@ class Routes{
     }
     attachGetRoutes(){
         this.webServer.get("/", (res,req) =>{
-            setHeaders(res);
-            res.end("insiderotes");
+            // setHeaders(res);
+            res.onAborted(() =>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/home.html", {encoding: 'utf-8'}));
+            }
         });
+
         this.webServer.get("/woah/:id", async (res,req) => {
             res.onAborted(() =>{
                 res.aborted = true;
