@@ -23,8 +23,6 @@ function indexRankQuery(query, numResults, pool){
     };
 
     var resultStr = "[";
-
-
     let runQ = function(preparedQuery, resultStr){
         return new Promise(function(resolve, reject){
             pool.query(preparedQuery, (err, qr) =>{
@@ -33,7 +31,7 @@ function indexRankQuery(query, numResults, pool){
                     resultStr = resultStr.slice(0, resultStr.length - 2) + "]";
                     resolve(resultStr);
                 }else{
-                    reject("error in IRQ");
+                    reject("error in IRQ" + err);
                 }
             })
         })
@@ -74,7 +72,7 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
                     resultStr = resultStr.slice(0, resultStr.length - 2) + "]";
                     resolve(resultStr);
                 }else{
-                    reject("error in IRQ");
+                    reject("error in IRQ" + err);
                 }
             })
         })}
@@ -85,12 +83,12 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
             pool.query(preparedHighlightQuery, (err, qr) => {
                 if(!err){
                     for(var i = 0; i < qr.rows.length; ++i) {
-                        highlightStr += "{\"" + qr.rows[i].ts_headline + "\", \"" + qr.rows[i].id + "\", \"" + qr.rows[i].title + "\", \"" + qr.rows[i].podcastname + "\"}, ";
+                        highlightStr += "{\"headline\":\"" + qr.rows[i].ts_headline + "\", \"id\":\"" + qr.rows[i].id + "\", \"title\":\"" + qr.rows[i].title + "\", \"name\":\"" + qr.rows[i].podcastname + "\"}, ";
                     }
                     resolve(highlightStr.slice(0, highlightStr.length - 2) + "]");
                 }else{
                     console.log("somethgn f up");
-                    reject("Error in runH");
+                    reject("Error in runH" + err);
                 }
             });
         })}
