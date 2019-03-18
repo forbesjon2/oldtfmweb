@@ -78,7 +78,7 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
         })}
 
 
-    let runH = function(preparedHighlightQuery,){
+    let runH = function(preparedHighlightQuery){
         return new Promise(function(resolve, reject){
             pool.query(preparedHighlightQuery, (err, qr) => {
                 if(!err){
@@ -87,7 +87,6 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
                     }
                     resolve(highlightStr.slice(0, highlightStr.length - 2) + "]");
                 }else{
-                    console.log("somethgn f up");
                     reject("Error in runH" + err);
                 }
             });

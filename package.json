@@ -11,7 +11,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "pg": "^7.8.2",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.4.0",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.8.0",
     "validator": "^10.11.0"
   }
 }

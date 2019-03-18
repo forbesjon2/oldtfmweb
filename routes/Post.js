@@ -11,33 +11,36 @@ class Routes{
     attachPostRoutes(){
         this.webServer.post("/search", (res, req) =>{
             var localPool = this.pool;
-            res.onAborted(() =>{
-                res.aborted = true;
-            });
-            
             // Get the Json and make sure its all letters or numbers
-            let getPromiseJson = function(){
-                return new Promise(function(resolve, reject){
-                    readJson(res, (obj) => {
-                        if(validator.isAlphanumeric(obj.query.replace(" ", ""))){
-                            resolve(obj.query);
-                        }else{
-                            reject("Error, query is not alphanumeric");
-                        }
-                    }, () => {
-                        reject("Error, invalid Json");
-                    });
-                });
-            }
-            getPromiseJson().then(function(query){
-                indexRankAndHighlightQuery(query, 10, localPool, res);
-            }).catch(function(err){
-                res.end("Error ahppened " + err);
-            })
+
+            let readJ = function (res){
+              return new Promise(function(resolve, reject){
+                readJson(res, (obj) => {
+                  var query = obj.query;
+                  console.log("qu" +  obj.query);
+                  if(validator.isAlphanumeric(query.replace(" ", ""))){
+                    resolve(query);
+                  }else{
+                    reject("Not alphanumeric");
+                  }
+                  }, () => {
+                    reject("Error, invalid Json");
+                  });
+                })
+              }
+              
+              readJ(res).then(function(response){
+                return indexRankAndHighlightQuery(response, 10, localPool, res);
+              }).catch(function(err){
+                res.end(err);
+              })
         });
         return this.webServer;
     }
-}
+  }
+
+
+
 
 /* Helper function for reading a posted JSON body */
 function readJson(res, cb, err) {
@@ -52,7 +55,9 @@ function readJson(res, cb, err) {
             json = JSON.parse(Buffer.concat([buffer, chunk]));
           } catch (e) {
             /* res.close calls onAborted */
-            res.close();
+            try{
+              res.close();
+            }catch(e){}
             return;
           }
           cb(json);
@@ -61,7 +66,9 @@ function readJson(res, cb, err) {
             json = JSON.parse(chunk);
           } catch (e) {
             /* res.close calls onAborted */
-            res.close();
+            try{
+              res.close();
+            }catch(e){}
             return;
           }
           cb(json);
@@ -74,6 +81,8 @@ function readJson(res, cb, err) {
         }
       }
 });
+/* Register error cb */
+res.onAborted(err);
 }
 
 module.exports = {Routes}

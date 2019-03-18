@@ -1,5 +1,5 @@
 var fs = require("fs");
-
+var validator = require("validator");
 
 class Routes{
     constructor(webServer, pool){
@@ -39,17 +39,22 @@ class Routes{
             }
         })
 
-        this.webServer.get("/w/:id", (res,req) => {
+        this.webServer.get("/transcription/:id", (res,req) => {
             res.onAborted(() =>{
                 res.aborted = true;
             });
-            this.pool.query("select transcription from transcriptions where id = 142;", (err, queryResult) =>{
-                if(!err && !res.aborted) {
-                    console.log("s", queryResult.rows[0].id);
-                    res.end('sup ' + queryResult.rows[0].transcription.toString());
-                }
-                else res.end("err");
-            });
+            var id = req.getParameter("id");
+            if(validator.isNumeric(id)){
+                this.pool.query("select transcription, description from transcriptions where id = " + id + ";", (err, queryResult) =>{
+                    if(!err && !res.aborted) {
+                        res.end('sup ' + queryResult.rows[0].transcription.toString() + " and " + queryResult.rows[0].description.toString());
+                    }
+                    else res.end("err" + err);
+                });
+            }else{
+                res.end("err");
+            }
+            
         })
 
 
