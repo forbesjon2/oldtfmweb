@@ -6,7 +6,19 @@ class Routes{
         this.webServer = webServer;
         this.pool = pool;
     }
+
+    /**
+     * This covers the majority of GET routes. The order and quick summary of each is as follows...
+     * "/" --> the homepage of transript.fm
+     * "/search/:query" --> the search page of transcript.fm. Will redirect to home if an invalid search occurs
+     * "/about": the 
+     * 
+     */
     attachGetRoutes(){
+        /**
+         * This is the homepage with the search bar in the middle and tabs "about, explore, contact, and account"
+         * listed at the top.
+         */
         this.webServer.get("/", (res,req) =>{
             // setHeaders(res);
             res.onAborted(() =>{
@@ -17,19 +29,10 @@ class Routes{
             }
         });
 
-        this.webServer.get("/woah/:id", async (res,req) => {
-            res.onAborted(() =>{
-                res.aborted = true;
-            });
-            console.log(req.getParameter("id"));
-            let r = await checkID2(req.getParameter(pool));
-            if(!res.aborted){
-                res.end(r);
-                console.log("yo " + r);
-            }
-        })
 
-                
+        /**
+         * The search page of transcript.fm. 
+         */
         this.webServer.get("/search/:query", (res, req) =>{
             res.onAborted(()=>{
                 res.aborted = true;
@@ -94,7 +97,6 @@ class Routes{
 
 
         // Figure out a better name for this. Basically we want to get everything you need to know to browse podcasts
-        // 
         this.webServer.get("/podcastsummary/:id", (res, req) =>{
             res.onAborted(()=> {
                 res.aborted = true;
@@ -113,6 +115,24 @@ class Routes{
         })
 
 
+
+        this.webServer.get("/about", (res,req) =>{
+            res.onAborted(()=> {
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/About.html", {encoding: 'utf-8'}));
+            }
+        });
+
+        this.webServer.get("/account", (res,req) =>{
+            res.onAborted(()=> {
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Account.html", {encoding: 'utf-8'}));
+            }
+        });
 
 
         return this.webServer;
