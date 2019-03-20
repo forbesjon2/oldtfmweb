@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>someText.fm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- browser tab icon -->
+    <!-- <link rel="icon" href="https://icon.cat/img/comingsoon.png"> -->
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600" rel="stylesheet"> 
+    
+    <!-- icons -->
+    <link href="https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <!-- navbar -->
+<div class="fixed-top container-flex shadow p-1 mb-5 bg-white rounded">
+    <div class="row">
+        <div class="col-lg-3 col-md-3 d-none d-md-block leftTitle" style="transform:rotate(0);">
+            someText.fm
+            <a href="/" class="stretched-link"></a>
+        </div>
+
+        <div id="navcenter" class="col-lg-6 col-md-6 centerTitle"></div>
+        
+        <div id="navright" class="col-lg-3 col-md-3 d-none d-md-block rightTitle" style="transform:rotate(0);">
+            <img src="https://www.omnycontent.com/d/playlist/a7b0bd27-d748-4fbe-ab3b-a6fa0049bcf6/392196e7-87cf-4af5-b31b-a89c01057741/2bab9367-8229-4d22-ad4c-a89c01057758/image.jpg?t=1520474383&size=Small" style="width:20px; height:20px"/>
+            <span id="podcastName"></span>
+            <a href="#" class="stretched-link"></a>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+
+<!-- Floating container -->
+<div id="floatingContainer" class="position-fixed container">
+    <div class="mx-auto row"><i class="icon ion-ios-share-alt"></i></div>
+    <div class="floatingTextShare mb-4 row">Share</div>
+    <div class="mx-auto row"><i class="icon ion-ios-timer"></i></div>
+    <div class="floatingTextTimer row">0:00</div>
+</div>
+
+<!-- Description -->
+<div id="description" class="container content">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-5 col-6">
+            <img id="mainIMG" src="https://www.omnycontent.com/d/playlist/a7b0bd27-d748-4fbe-ab3b-a6fa0049bcf6/392196e7-87cf-4af5-b31b-a89c01057741/2bab9367-8229-4d22-ad4c-a89c01057758/image.jpg?t=1520474383&size=Small" class="img-fluid" alt="Responsive image"/>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-7 col-6 ">
+            <div id="descTitle" class="row "></div>
+            <div id="descContent" class="row"></div>
+        </div>
+    </div>
+    <div id="subDesc" class="mt-4 col">
+        <div class="row">Date: {{date}}</div>
+        <div id="duration" class="row">Duration: </div>
+    </div>
+    
+</div>
+<br>
+<br>
+<br>
+
+</div>
+
+
+
+
+
+
+<style>
+.leftTitle{
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 2vw;
+    font-size: 4vmax;
+    font-size: 2vmin;
+    text-align: right;
+    align-self: center;
+    padding-right: 5%;
+}
+.centerTitle{
+    font-family: 'Source Serif Pro', serif;
+    font-size:100%;
+    text-align: center;
+    align-self: center;
+
+}
+.rightTitle{
+    font-family: 'Merriweather', serif;
+    font-size: 2vw;
+    font-size: 4vmax;
+    font-size: 2vmin;
+    font-weight:400;
+    text-align: center;
+    align-self: center;
+}
+.content{
+    font-family: 'Source Serif Pro', serif;
+    font-size: 14px;
+    font-weight:400;
+}
+#descTitle{
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 4vw;
+    font-size: 8vmax;
+    font-size: 4vmin;
+    margin-bottom: 5%;
+    
+}
+#descContent{
+    font-family: 'Source Serif Pro', serif;
+    font-size: 14px;
+    font-weight:400;
+}
+#mainIMG{
+    box-shadow: 7px 7px 20px #00000025;
+}
+#subDesc{
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 100%;
+}
+#floatingContainer{
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    margin-left: 20px;
+    font-family: 'Merriweather', serif;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+
+.floatingTextTimer{
+    margin-left: -4px;
+}
+.floatingTextShare{
+    margin-left: -9px;
+}
+.ion-ios-share-alt{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 0.7;
+    color: black;
+}
+.ion-ios-share-alt:hover{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 1;
+    color: black;
+}
+.ion-ios-timer:before{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 0.7;
+    color: black;
+}
+.ion-ios-timer:before:hover{
+    font-size: 22px;
+    align-self: auto;
+    opacity: 1;
+    color: black;
+}
+
+</style>
+
+
+<script>
+// Event listeners
+function archaic(num){
+    document.querySelector(".floatingTextTimer").textContent = "0:0" + num;
+}
+
+function calculateElapsed(index, wpm){
+    var elapsedTime = (index / wpm);
+    var minute =  Math.round(elapsedTime % 60);
+    if(minute.toString().length == 1){
+        document.querySelector(".floatingTextTimer").textContent = Math.floor(elapsedTime / 60) + ":0" + minute;
+        return;
+    }else{
+        document.querySelector(".floatingTextTimer").textContent = Math.floor(elapsedTime / 60) + ":" + minute;
+        return;
+    }
+}
+
+
+// document.querySelector("#main").textContent
+let getTranscription = function(id){
+    return new Promise(function(resolve, reject){
+        var req = new XMLHttpRequest();
+        req.open("GET", "/podcast/" + id);
+        req.onload = function(){
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    resolve(JSON.parse(req.responseText));
+                } else {
+                    reject(req.statusText);
+                }
+            }
+        }
+        req.send()
+        });
+}
+
+var id = decodeURI(window.location.toString().split("transcription/")[1]);
+getTranscription(id).then(function(response){
+    //transcription, description(descContent), podcastname(podcastName), title(descTitle), imageuri(mainIMG), duration
+    document.querySelector("#descContent").textContent = response[0].description;
+    document.querySelector("#podcastName").textContent = response[0].podcastname;
+    document.querySelector("#descTitle").textContent = response[0].title;
+    document.querySelector("#mainIMG").attributes.src = "arg";
+    document.querySelector("#navcenter").textContent = response[0].title; 
+    document.querySelector("#duration").textContent = "Duration: " + (Math.floor(response[0].duration / 60)) + " minutes";
+
+    var splitTranscription = response[0].transcription.split(" ");
+    var totalNumWords = splitTranscription.length;
+    var duration = response[0].duration;     //6619.22 1h 49min
+    var transcriptionTimeMins = duration / 60;
+    var wpm = totalNumWords / transcriptionTimeMins;
+
+    var newdiv = document.createElement('div');
+    newdiv.setAttribute("class", "container content");
+    for(var item in splitTranscription){
+        var span = document.createElement('span');
+        span.setAttribute("onmouseover", "calculateElapsed(" + item + ", " + wpm + ")");
+        span.textContent = splitTranscription[item] + " ";
+        newdiv.appendChild(span);
+    }
+    document.body.appendChild(newdiv);
+    document.body.appendChild(document.createElement("br"));
+}).catch(function(errorMsg){
+    console.error(errorMsg);
+})
+
+</script>
+</body>
+</html>

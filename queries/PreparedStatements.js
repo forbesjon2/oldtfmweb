@@ -66,39 +66,45 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
 
     let runQ = function(preparedQuery, resultStr){
         return new Promise(function(resolve, reject){
-            pool.query(preparedQuery, (err, qr) =>{
-                if(!err){
-                    for(var i = 0; i < qr.rows.length; ++i) resultStr += "\"" + qr.rows[i].id + "\", ";
-                    resultStr = resultStr.slice(0, resultStr.length - 2) + "]";
-                    resolve(resultStr);
-                }else{
-                    reject("error in IRQ" + err);
-                }
-            })
+            try{
+                pool.query(preparedQuery, (err, qr) =>{
+                    if(!err){
+                        for(var i = 0; i < qr.rows.length; ++i) resultStr += "\"" + qr.rows[i].id + "\", ";
+                        resultStr = resultStr.slice(0, resultStr.length - 2) + "]";
+                        resolve(resultStr);
+                    }else{
+                        reject("error in IRQ" + err);
+                    }
+                })
+            }catch(e){
+                reject("RunQ pool query issue " + e);
+            }
         })}
 
 
     let runH = function(preparedHighlightQuery){
         return new Promise(function(resolve, reject){
-            pool.query(preparedHighlightQuery, (err, qr) => {
-                if(!err){
-                    for(var i = 0; i < qr.rows.length; ++i) {
-                        highlightStr += "{\"headline\":\"" + qr.rows[i].ts_headline + "\", \"id\":\"" + qr.rows[i].id + "\", \"title\":\"" + qr.rows[i].title + "\", \"name\":\"" + qr.rows[i].podcastname + "\"}, ";
+            try{
+                pool.query(preparedHighlightQuery, (err, qr) => {
+                    if(!err){
+                        resolve(JSON.stringify(qr.rows, ));
+                    }else{
+                        reject("Error in runH" + err);
                     }
-                    resolve(highlightStr.slice(0, highlightStr.length - 2) + "]");
-                }else{
-                    reject("Error in runH" + err);
-                }
-            });
+                });
+            }catch(e){
+                reject("RunH pool query issue" + e);
+            }
+            
         })}
 
     var resultStr = "[";
-    var highlightStr = "[";
 
+    
     runQ(preparedRankQuery, resultStr).then(function(idArray){
         const preparedHighlightQuery = {
             name: "highlight-query",
-            text: "WITH arr(ids) AS (VALUES($1)) SELECT ts_headline('english',(coalesce(transcription, '') || ' ... '|| coalesce(description)), plainto_tsquery($2), 'MinWords=20, MaxWords=70'), id, title, podcastname FROM transcriptions WHERE id IN (SELECT elem::int FROM arr, json_array_elements_text(ids::json) elem);",
+            text: "WITH arr(ids) AS (VALUES($1)) SELECT ts_headline('english',(coalesce(transcription, '') || ' ... '|| coalesce(description)), plainto_tsquery($2), 'MinWords=40, MaxWords=90'), id, title, podcastname, date FROM transcriptions WHERE id IN (SELECT elem::int FROM arr, json_array_elements_text(ids::json) elem);",
             values: [idArray, query]
         };
         return runH(preparedHighlightQuery);

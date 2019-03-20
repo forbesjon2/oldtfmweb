@@ -24,7 +24,7 @@
 <div id="mc" class="container-flex">
     <div class="row shadow p-1 mb-2 rounded">
         <div class="col col-lg-1 col-md-1 col-sm-1 text-center d-none text-right d-sm-block"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:#fff;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>iconSVG</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text class="cls-2" transform="translate(2 31.47)">T</text><text class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg><a href="/" class="stretched-link"></a></div>
-        <div class="col queryText text-left col-lg-3 col-md-3 col-sm-3"></div>
+        <div class="col queryText text-left col-lg-3 col-md-3 col-sm-3"><input value="" onkeyup="enterKeyPress(event)"></div>
         <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8"></div>
     </div>
     
@@ -32,13 +32,8 @@
     <div class="resultInfo row mb-1">About 32 results (0.47 seconds)</div>
     
     <!-- Query Information -->
+    <!-- <div class="queryInfo row"><a class="qTitle" href="">Title</a><div class="qDate">September 22, 2017</div></div><div class="queryinfo"><div class="qPodcast">Mark Levin Audio Rewind</div></div><div class="qDescription">Just like the Word desktop program, Word Online counts words while you type. If you don’t see the word count at the bottom of the window, make sure you’re in Editing view (click Edit Document > Edit in Word Online).. Click the word count to switch it off and on.</div> -->
 
-    <!-- <div class="row one ml-4">
-        <div class="col">s</div>
-        <div class="col">s</div>
-        <div class="col">s</div>
-    </div> -->
-</div>
 </div>
 
 <!-- [{"headline":"<b>media</b> wouldn't read it but the <b>media</b> won't read it because the <b>media</b> have an artist and by the way the last", "id":"204", "title":"Mark Levin Audio Rewind - 5/15/18", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> in this country going on and on today about the heated rhetoric that hateful rhetoric because the <b>media</b> in this", "id":"88", "title":"Mark Levin Audio Rewind - 10/24/18", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> <b>media</b> and the aggregate who's asses are in washington d.c. and they never give up their fat asked", "id":"178", "title":"Mark Levin Audio Rewind - 6/20/18", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> we're going to get your opinion on donald trumps uh treatment of the <b>media</b> they're treatment of him and his family", "id":"822", "title":"The Savage Nation - 8/3/18", "name":"The Savage Nation Podcast with Michael Savage"}, {"headline":"<b>media</b> you know when these <b>media</b> people self serving lee say that they're out there defending the press no they", "id":"180", "title":"Mark Levin Audio Rewind - 6/18/18", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> senior people in the intelligence services we're leaking to the <b>media</b> and the <b>media</b> as to knock her first", "id":"90", "title":"Mark Levin Audio Rewind - 10/22/18", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> right <b>media</b> i we're gonna wait to see how they count and how they present their information you know", "id":"22", "title":"Mark Levin Audio Rewind - 1/24/19", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> habits back because the lake to the <b>media</b> he was one of their sources it's not just an f.b.i", "id":"4", "title":"Mark Levin Audio Rewind - 2/19/19", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> keep reporting on the <b>media</b> have you noticed that the <b>media</b> keep reporting about themselves and c.n.n. keeps reporting", "id":"147", "title":"Mark Levin Audio Rewind - 8/2/18", "name":"Mark Levin Audio Rewind"}, {"headline":"<b>media</b> and who's paid by <b>media</b> there's no constitutional issue that's not to say some judge wouldn", "id":"125", "title":"Mark Levin Audio Rewind - 9/3/18", "name":"Mark Levin Audio Rewind"}] -->
@@ -49,18 +44,29 @@
 .queryText{font-family: 'Merriweather', serif;font-weight: 400;margin-top: 5px;font-size:100%;}
 svg{height: 2em;width: 2em;opacity: 1;margin-left: 10px;}
 .resultInfo{font-family: 'Didact Gothic', sans-serif; font-size: 14px;margin-left: 34px;margin-bottom: 40px;}
-.queryInfo{margin-left: 34px;font-family: 'Merriweather', serif;font-weight: 400;margin-top: 30px;}
-.qTitle{color: #0071BC; opacity: 0.7;width: 595px;}
+.queryInfo{margin-left: 34px;font-family: 'Merriweather', serif;font-weight: 400;margin-top: 30px; max-width: 700px;}
+.qTitle{color: #0071BC; opacity: 0.7;width: 85%;}
 .qTitle:hover{color: #0071BC; opacity: 1;}
-.qDate{font-family: 'Didact Gothic', sans-serif; font-size: 12px;width:100px;line-height: 26px;opacity: 0.7;}
+.qDate{font-family: 'Didact Gothic', sans-serif; font-size: 12px;width:15%;line-height: 26px;opacity: 0.7;}
 .qDescription{font-family: 'Source Serif Pro', serif;font-size:16px;margin-left: 34px;max-width: 700px;}
 .one{max-width: 700px;}
+.qPodcast{font-family: 'Didact Gothic', sans-serif; font-size: 12px;margin-left: 34px;color: #006837;}
+input{-webkit-appearance: none;font-family: 'Merriweather', serif;display: block;outline: none;border-style: none;}
 </style>
 <!-- Script -->
 <script>
+//runs when you click enter in the top input field.
+function enterKeyPress(event){
+    if(event.keyCode == 13 || event.key == "Enter"){
+        window.location.href = "/search/" + document.querySelector("input").value;
+    }
+}
+// Under 700px make date shorter in format 
+
+
 // Set up and send the request
 var query = decodeURI(window.location.toString().split("search/")[1]);
-document.querySelector(".queryText").textContent = query;
+document.querySelector("input").value = query;
 var req = new XMLHttpRequest();
 var qr = "";
 // document.querySelector("#main").textContent
@@ -74,10 +80,8 @@ if (req.readyState === 4) {
         console.log(qr)
         qr = JSON.parse(qr);
         for(var item in qr){
-            console.log("", qr[item]);
             var newdiv = document.createElement('div');
-            
-            newdiv.innerHTML ='<div class="queryInfo row"><a class="qTitle" href="/transcription/' + qr[item].id + '">' + qr[item].title + '</a></div><div class="qDate">September 22, 2017</div></div><div class="qDescription">' + qr[item].headline + '</div></div>';
+            newdiv.innerHTML ='<div class="queryInfo row"><a class="qTitle" href="/transcription/' + qr[item].id + '">' + qr[item].title + '</a><div class="qDate">September 22, 2017</div></div><div class="queryinfo"><div class="qPodcast">' + qr[item].podcastname + '</div></div><div class="qDescription">' + qr[item].ts_headline + '</div>';
             var divK = document.querySelector(".one");
             var divParent = document.querySelector("#mc");
             divParent.appendChild(newdiv);
@@ -87,14 +91,6 @@ if (req.readyState === 4) {
     }
     }
 }
-new Vue({
-    constructor(){
-
-    },
-    el:"#main",
-    
-})
-
 </script>
 </body>
 </html>

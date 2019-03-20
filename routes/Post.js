@@ -16,10 +16,8 @@ class Routes{
             let readJ = function (res){
               return new Promise(function(resolve, reject){
                 readJson(res, (obj) => {
-                  var query = obj.query;
-                  console.log("qu" +  obj.query);
-                  if(validator.isAlphanumeric(query.replace(" ", ""))){
-                    resolve(query);
+                  if(validator.isAlphanumeric(obj.query.replace(/ /g, ""))){
+                    resolve(obj.query);
                   }else{
                     reject("Not alphanumeric");
                   }
@@ -30,9 +28,9 @@ class Routes{
               }
               
               readJ(res).then(function(response){
-                return indexRankAndHighlightQuery(response, 10, localPool, res);
+                indexRankAndHighlightQuery(response, 10, localPool, res);
               }).catch(function(err){
-                res.end(err);
+                console.log("an error happened " + err);
               })
         });
         return this.webServer;

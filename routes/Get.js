@@ -39,22 +39,37 @@ class Routes{
             }
         })
 
-        this.webServer.get("/transcription/:id", (res,req) => {
+        //This is to be used as an API route from /transcription/:id route
+        this.webServer.get("/podcast/:id", (res,req) => {
             res.onAborted(() =>{
                 res.aborted = true;
             });
+
             var id = req.getParameter("id");
-            if(validator.isNumeric(id)){
-                this.pool.query("select transcription, description from transcriptions where id = " + id + ";", (err, queryResult) =>{
-                    if(!err && !res.aborted) {
-                        res.end('sup ' + queryResult.rows[0].transcription.toString() + " and " + queryResult.rows[0].description.toString());
-                    }
-                    else res.end("err" + err);
-                });
-            }else{
+            if(!validator.isNumeric(id) && !res.aborted){
                 res.end("err");
+            }else{
+                this.pool.query("SELECT t.transcription, t.description, t.podcastname, t.title, p.imageuri, t.duration FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.id = " + id + " LIMIT 1;", (err, queryResult) =>{
+                    if(!err && !res.aborted) {
+                        res.end(JSON.stringify(queryResult.rows));
+                    }
+                    else if(err && !res.aborted){
+                        res.end("err" + err);
+                    }
+                });
             }
-            
+        })
+
+
+        // This is the generic transcription route used by search. Its the nice view as opposed to /podcast/:id
+        //which returns just the transcription text
+        this.webServer.get("/transcription/:id", (res, req) =>{
+            res.onAborted(()=>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Transcription.html", {encoding: 'utf-8'}));
+            }
         })
 
 
