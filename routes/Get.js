@@ -134,6 +134,15 @@ class Routes{
             }
         });
 
+        this.webServer.get("/explore", (res,req) =>{
+            res.onAborted(()=> {
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Explore.html", {encoding: 'utf-8'}));
+            }
+        });
+
 
         return this.webServer;
     }
