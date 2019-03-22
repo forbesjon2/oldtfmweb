@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>about</title>
+    <title>explore</title>
     
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -24,16 +24,27 @@
         <div class="col col-lg-1 col-md-1 col-sm-1 text-center d-none  text-right d-sm-block"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:#fff;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>iconSVG</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text class="cls-2" transform="translate(2 31.47)">T</text><text class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg></div>
         <div class="col menuCenterText text-left col-lg-2 d-none d-lg-block" >Something.fm</div>
         <div id="navButton" class="col menubarText text-center col-lg-2 col-md-2 col-sm-2 col-xs-1"><a href="/contact">contact</a></div>
-        <div id="navButton" class="col rightMenu menubarText text-center col-lg-2 col-md-3 col-sm-3 d-none d-sm-block"><a href="/account">account</a></div>
+        <div id="navButton" class="col rightMenu menubarText text-center col-lg-2 col-md-3 col-sm-3"><a href="/account">account</a></div>
     </div>
 
     <div class="row">
         <!-- The menu bar (categories and popular tabs go here) -->
-        <div class="col mt-3 mainCol border-top border-right vh-100 ">
-            <div class="position-absolute menuSelect vh-100" style="background-color: #5B5A4D;width: 100%;top: 0px;left: 0px;" onclick="ms(2);">Popular</div>
-            <div class="position-absolute menuDeselect vh-100" style="background-color: #F2F2F2;width: 100%;top: 0px;left: 0px;" onclick="ms(1);">Categories</div>
+        <div class="col mt-3 mainCol vh-100" style="max-width: 280px; min-width: 150px;">
+            <div class="noTextSelect position-absolute menuSelect vh-100" style="background-color: #5B5A4D;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
+                <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #fff;">popular</span>
+                <span class="row colItem justify-content-center mx-auto" style="color: #fff;" onclick="menuClick(1,0, this);">news</span>
+            </div>
+            <div class="noTextSelect position-absolute menuDeselect vh-100" style="background-color: #F2F2F2;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
+                <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #000;">categories</span>
+                <span class="row colItem justify-content-center mx-auto" style="color: #000;" onclick="menuClick(2,2, this);">news</span>
+            </div>
         </div>
-        <div class="col mt-3 mainCol border-top border-right"></div>
+        <div class="col mt-3 mainCol border-top border-right d-none d-lg-block">
+            <div class="position-inherit" style="width:100%;">
+                    <span class="row noTextSelect cName justify-content-center mx-auto pl-3 pr-2"></span>
+                    <span class="row noTextSelect cDescription justify-content-center mx-auto pl-3 pr-2"></span>
+            </div>
+        </div>
         <div class="col mt-3 mainCol border-top border-right"></div>
         <div class="col mt-3 mainCol border-top border-right"></div>
         <div class="col mt-3 mainCol border-top"></div>
@@ -45,17 +56,23 @@
 
 <!-- CSS -->
 <style>
+.noTextSelect{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none; cursor: default;}
+#navButton{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;}
 .menuSelect{margin-top: 50px; z-index: 500;}
 .menuDeselect{margin-top: 0px; z-index: 100;}
+.cName{font-family: 'Didact Gothic', sans-serif;font-size: 200%;width:100%;}
+.cDescription{font-family: 'Didact Gothic', sans-serif;font-size: 100%;}
 .mainCol{border: 1px 0px 0px 0px rgba(0, 0, 0, 0.041);padding:0;}
+.colItem{font-family: 'Didact Gothic', sans-serif;font-size: 100%;opacity: 0.7;cursor: pointer;}
+.colItemActive{opacity: 1;text-decoration: underline;}
+.colItem:hover{opacity: 1;text-decoration: underline;}
+.colText{font-family: 'Merriweather', serif;font-weight: 700; font-size: 1.5em;width:100%;opacity: 0.7;cursor: default;}
 a{color: black; opacity: 0.7;}
 i{color: black; opacity: 0.7; margin-left: 30px; margin-right: 30px}
 i:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: black;}
 .active{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: black;}
 a:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: black;}
 .icon0{height: 2em;width: 2em;opacity: 1;}        
-.ion-ios-search:before{font-size: 22px;color: black;}
-input::-ms-clear{display: none;}
 
 input{
     -webkit-appearance: none;
@@ -92,19 +109,37 @@ input{
 </style>
 
 <script>
-function ms(id){
-    var a = document.querySelector(".menuSelect");
-    var b = document.querySelector(".menuDeselect");
-    if(id === 1){
+var catg = [["Comedy", "In a modern sense, comedy refers to any discourse or work generally intended to be humorous or amusing by inducing laughter, especially in theatre, television, film, stand-up comedy, or any other medium of entertainment."],
+            ["Arts", "Two"], ["News", "Three"]];
+var popu = ["Providers", "Podcasts", "Categories"];
+function init(){
+    for(var item in catg){
+        var category = catg[item][0];
+        var categoryDescription = catg[item][1];
+    }
+}
+
+function menuClick(menu, index, element){
+    //remove the active status from the other elements
+    var ci = document.querySelectorAll(".colItem");
+    for(var i = 0; i < ci.length; ++i) ci[i].classList.remove("colItemActive");
+    //make the element in the menu look active
+    element.classList.add("colItemActive");
+    
+    document.querySelector(".cName").textContent = catg[index][0];
+    document.querySelector(".cDescription").textContent = catg[index][1];
+
+}
+
+
+function ms(element){
+    if(element.classList.contains("menuDeselect")){
+        var a = document.querySelector(".menuSelect");
+        var b = document.querySelector(".menuDeselect");
         a.classList.remove("menuSelect");
         a.classList.add("menuDeselect");
         b.classList.add("menuSelect");
         b.classList.remove("menuDeselect");
-    }else{
-        b.classList.remove("menuSelect");
-        b.classList.add("menuDeselect");
-        a.classList.add("menuSelect");
-        a.classList.remove("menuDeselect");
     }
 }
 </script>

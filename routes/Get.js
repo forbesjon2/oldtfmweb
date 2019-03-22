@@ -143,6 +143,15 @@ class Routes{
             }
         });
 
+        this.webServer.get("/contact", (res,req) =>{
+            res.onAborted(()=> {
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Contact.html", {encoding: 'utf-8'}));
+            }
+        });
+
 
         return this.webServer;
     }
