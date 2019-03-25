@@ -82,7 +82,7 @@ if (req.readyState === 4) {
         for(var item in qr){
             var newdiv = document.createElement('div');
             newdiv.innerHTML ='<div class="queryInfo row"><a class="qTitle" href="/transcription/' + qr[item].id + '">' + qr[item].title + '</a><div class="qDate">September 22, 2017</div></div><div class="queryinfo"><div class="qPodcast">' + qr[item].podcastname + '</div></div><div class="qDescription">' + qr[item].ts_headline + '</div>';
-            var divK = document.querySelector(".one");
+            // var divK = document.querySelector(".one");
             var divParent = document.querySelector("#mc");
             divParent.appendChild(newdiv);
         }

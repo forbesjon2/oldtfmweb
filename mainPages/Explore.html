@@ -33,14 +33,11 @@
     <div class="row">
         <!-- The menu bar (categories and popular tabs go here) -->
         <div class="col mt-3 col-lg-2 col-md-3 d-none d-md-block mainCol vh-100" style="max-width: 280px; min-width: 15px;">
-            <div class="noTextSelect position-absolute menuSelect vh-100" style="background-color: #5B5A4D;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
+            <div id="popularDiv" class="noTextSelect position-absolute menuSelect vh-100" style="background-color: #5B5A4D;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
                 <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #fff;">popular</span>
-                <span class="row colItem justify-content-center mx-auto" style="color: #fff;border-bottom-color: #fff;" onclick="menuClick(1,0, this);">news</span>
             </div>
-            <div class="noTextSelect position-absolute menuDeselect vh-100" style="background-color: #F2F2F2;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
+            <div id="categoriesDiv" class="noTextSelect position-absolute menuDeselect vh-100" style="background-color: #F2F2F2;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
                 <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #000;">categories</span>
-                <span class="row colItem justify-content-center mx-auto" style="color: #000; border-bottom-color: #000;" onclick="menuClick(2,2, this);">news</span>
-                <span class="row colItem justify-content-center mx-auto" style="color: #000; border-bottom-color: #000;" onclick="menuClick(2,2, this);">news</span>
             </div>
         </div>
 
@@ -48,7 +45,7 @@
         <div class="col mt-3 col-lg-2 mainCol border-top border-right d-none d-lg-block">
             <div class="position-inherit" style="width:100%;">
                     <span class="row noTextSelect cName justify-content-center mx-auto pl-3 pr-2"></span>
-                    <div class="row noTextSelect cDescription justify-content-center mx-auto pl-3 pr-2"></div>
+                    <span class="row noTextSelect cDescription justify-content-center mx-auto pl-3 pr-2"></span>
             </div>
         </div>
 
@@ -59,7 +56,7 @@
                 <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
                 <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
                 <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-light vh-100"></div>
-                <div class="header" style="z-index: 1200;-webkit-transform: rotate(-90deg);transform: rotate(-90deg);margin-top: 68px;margin-left: 10px;position: absolute;"><span class="noTextSelect">Category:</span></div>
+                <div class="header" style="z-index: 1200;-webkit-transform: rotate(-90deg);transform: rotate(-90deg);margin-top: 68px;margin-left: 10px;position: absolute;"><span class="noTextSelect catTitle">Category:</span></div>
                 <div class="header" style="z-index: 1200;margin-left: 125px;margin-top: 7px;position: absolute;"><span class="noTextSelect catName">Comedy</span></div>
             </div>
         </div>
@@ -78,7 +75,7 @@
 .cName{font-family: 'Didact Gothic', sans-serif;font-size: 200%;width:100%;}
 .cDescription{font-family: 'Didact Gothic', sans-serif;font-size: 100%;}
 .mainCol{border: 1px 0px 0px 0px rgba(0, 0, 0, 0.041);padding:0;}
-.colItem{font-family: 'Didact Gothic', sans-serif;font-size: 100%;opacity: 0.7;cursor: pointer;line-height: 20px; width: max-content;}
+.colItem{font-family: 'Didact Gothic', sans-serif;font-size: 85%;opacity: 0.7;cursor: pointer;line-height: 20px; width: max-content;margin-bottom: 4px;}
 .colItemActive{opacity: 1;border-bottom: 0.9px solid; }
 .colItem:hover{opacity: 1;border-bottom: 1.2px solid; }
 .colText{font-family: 'Merriweather', serif;font-weight: 700; font-size: 1.5em;width:100%;opacity: 0.7;cursor: default;}
@@ -184,11 +181,30 @@ req.send()});
  * This begins by parsing the category string 
  *************************************************************************/
 let init = function(podcastList, categoryList){
+    this.podcastList = podcastList;
+    this.categoryList = categoryList;
     for(var item in podcastList){
         var name = podcastList[item]["name"];
-        console.log(name)
     }
+    for(var item in categoryList){
+        //add under popular in menu.
+        var popularSpan = document.createElement("div");
+        popularSpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #fff;border-bottom-color: #fff;" onclick="menuClick(1,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
+        var popularSpanParent = document.querySelector("#popularDiv");
+        popularSpanParent.appendChild(popularSpan);
+        //add under categories in menu.
+        var categorySpan = document.createElement("div");
+        categorySpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #000;border-bottom-color: #000;" onclick="menuClick(2,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
+        var categorySpanParent = document.querySelector("#categoriesDiv");
+        categorySpanParent.appendChild(categorySpan);
+    }
+    // var hiddenList = document.body.createElement("div");
+    // hiddenList.innerHTML('<span class=')
+    // var hiddenPodcastList = document.body.createElement("div");
+    
 }
+
+
 
 
 //Promises logic
@@ -210,10 +226,13 @@ function menuClick(menu, index, element){
     for(var i = 0; i < ci.length; ++i) ci[i].classList.remove("colItemActive");
     //make the element in the menu look active
     element.classList.add("colItemActive");
+    //change the title and name of the heading
+    document.querySelector(".catTitle").textContent = [menu == 1 ? "Popular:" : "Category:"];
+    document.querySelector(".catName").textContent = element.textContent;
     
-    document.querySelector(".catName").textContent = catg[index][0];
-    document.querySelector(".cName").textContent = catg[index][0];
-    document.querySelector(".cDescription").textContent = catg[index][1];
+    // document.querySelector(".cName").textContent = catg[index][0];
+    // document.querySelector(".cDescription").textContent = catg[index][1];
+    
 }
 
 
