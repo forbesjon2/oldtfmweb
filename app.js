@@ -16,6 +16,7 @@ const pool = new Pool({
 var app = uWS.App();
 
 app = new Get.Routes(app, pool).attachGetRoutes();
+app = new Get.Routes(app, pool).attachGetAPIRoutes();
 app = new Post.Routes(app, pool).attachPostRoutes();
 
 

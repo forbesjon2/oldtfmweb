@@ -13,13 +13,13 @@
     <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet"> 
 
     <!-- Adobe acumin -->
-    <link rel="stylesheet" href="https://use.typekit.net/eif1eeg.css">
+    <link rel="stylesheet" href="https://use.typekit.net/lwv6oxy.css">
     <!-- Icon -->
     <link href="https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css" rel="stylesheet">
 </head>
-<body>
+<body style="overflow:hidden;">
     
-<div class="container-fluid">
+<div class="container-fluid" style="padding-left:0;padding-right:0;overflow: hidden;">
     <div id="navBar" class="mt-3 row">
         <div id="navButton" class="col ml-3 menubarText text-center col-lg-2 col-md-3 col-sm-3 col-xs-1 colbg-primary leftMenu"><a href="/about">about</a></div>
         <div id="navButton" class="col menubarText text-center col-lg-2 col-md-2 col-sm-2 col-xs-1"><a href="/explore" class="active">explore</a></div>
@@ -29,43 +29,48 @@
         <div id="navButton" class="col rightMenu menubarText text-center col-lg-2 col-md-3 col-sm-3"><a href="/account">account</a></div>
     </div>
 
+    <!-- The Page content all is inside this row -->
     <div class="row">
         <!-- The menu bar (categories and popular tabs go here) -->
-        <div class="col mt-3 col-lg-2 col-md-2 d-none d-md-block mainCol vh-100" style="max-width: 280px; min-width: 150px;">
+        <div class="col mt-3 col-lg-2 col-md-3 d-none d-md-block mainCol vh-100" style="max-width: 280px; min-width: 15px;">
             <div class="noTextSelect position-absolute menuSelect vh-100" style="background-color: #5B5A4D;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
                 <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #fff;">popular</span>
-                <span class="row colItem justify-content-center mx-auto" style="color: #fff;" onclick="menuClick(1,0, this);">news</span>
+                <span class="row colItem justify-content-center mx-auto" style="color: #fff;border-bottom-color: #fff;" onclick="menuClick(1,0, this);">news</span>
             </div>
             <div class="noTextSelect position-absolute menuDeselect vh-100" style="background-color: #F2F2F2;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
                 <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #000;">categories</span>
-                <span class="row colItem justify-content-center mx-auto" style="color: #000;" onclick="menuClick(2,2, this);">news</span>
+                <span class="row colItem justify-content-center mx-auto" style="color: #000; border-bottom-color: #000;" onclick="menuClick(2,2, this);">news</span>
+                <span class="row colItem justify-content-center mx-auto" style="color: #000; border-bottom-color: #000;" onclick="menuClick(2,2, this);">news</span>
             </div>
         </div>
 
+        <!-- The description tab is here. This disappears in smaller page sizes, value is set by JS function-->
         <div class="col mt-3 col-lg-2 mainCol border-top border-right d-none d-lg-block">
             <div class="position-inherit" style="width:100%;">
                     <span class="row noTextSelect cName justify-content-center mx-auto pl-3 pr-2"></span>
-                    <span class="row noTextSelect cDescription justify-content-center mx-auto pl-3 pr-2"></span>
+                    <div class="row noTextSelect cDescription justify-content-center mx-auto pl-3 pr-2"></div>
             </div>
         </div>
 
-        <div class="col col-auto mainCol w-100 mt-3 bg-primary">
-            <span class="header noTextSelect">Category:</span>
+        <!-- The list of items goes in here -->
+        <div class="col mt-3 col-lg-8 col-md-9 col-sm-12 col-xs-12 overflow-auto" style="overflow-y: hidden;">
+            <div class="row" style="overflow-y: hidden;" >
+                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
+                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
+                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
+                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-light vh-100"></div>
+                <div class="header" style="z-index: 1200;-webkit-transform: rotate(-90deg);transform: rotate(-90deg);margin-top: 68px;margin-left: 10px;position: absolute;"><span class="noTextSelect">Category:</span></div>
+                <div class="header" style="z-index: 1200;margin-left: 125px;margin-top: 7px;position: absolute;"><span class="noTextSelect catName">Comedy</span></div>
+            </div>
         </div>
-        
-        
-        
     </div>
-
 </div>
 
 
 
 <!-- CSS -->
 <style>
-.header{font-family: acumin-pro-condensed, sans-serif; font-weight: 700; font-style: normal;margin-left: 40%;-webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
-    transform-origin: left top 0;}
+.header{font-family: acumin-pro-extra-condensed, sans-serif;font-weight: 600;font-style: normal;font-size:350%;}
 .noTextSelect{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none; cursor: default;}
 #navButton{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;}
 .menuSelect{margin-top: 50px; z-index: 500;}
@@ -73,9 +78,9 @@
 .cName{font-family: 'Didact Gothic', sans-serif;font-size: 200%;width:100%;}
 .cDescription{font-family: 'Didact Gothic', sans-serif;font-size: 100%;}
 .mainCol{border: 1px 0px 0px 0px rgba(0, 0, 0, 0.041);padding:0;}
-.colItem{font-family: 'Didact Gothic', sans-serif;font-size: 100%;opacity: 0.7;cursor: pointer;}
-.colItemActive{opacity: 1;text-decoration: underline;}
-.colItem:hover{opacity: 1;text-decoration: underline;}
+.colItem{font-family: 'Didact Gothic', sans-serif;font-size: 100%;opacity: 0.7;cursor: pointer;line-height: 20px; width: max-content;}
+.colItemActive{opacity: 1;border-bottom: 0.9px solid; }
+.colItem:hover{opacity: 1;border-bottom: 1.2px solid; }
 .colText{font-family: 'Merriweather', serif;font-weight: 700; font-size: 1.5em;width:100%;opacity: 0.7;cursor: default;}
 a{color: black; opacity: 0.7;}
 i{color: black; opacity: 0.7; margin-left: 30px; margin-right: 30px}
@@ -122,13 +127,83 @@ input{
 var catg = [["Comedy", "In a modern sense, comedy refers to any discourse or work generally intended to be humorous or amusing by inducing laughter, especially in theatre, television, film, stand-up comedy, or any other medium of entertainment."],
             ["Arts", "Two"], ["News", "Three"]];
 var popu = ["Providers", "Podcasts", "Categories"];
-function init(){
-    for(var item in catg){
-        var category = catg[item][0];
-        var categoryDescription = catg[item][1];
+//____________________________________INITIALIZATION________________________________
+var podcastList;
+var categoryList;
+/*************************************************************************
+ * Gets the list of podcasts and a number of other essential fields.
+ * 
+ * The contents of which include an array of the following
+ * {the number of transcriptions, the podcast name, the image url, the category, 
+ * the podcast id}
+ *************************************************************************/
+let getPodcasts = function(podcastList, categoryList){
+return new Promise(function(resolve, reject){
+    var req = new XMLHttpRequest();
+    req.open("GET", "/api/podcasts");
+    req.onload = function(){
+        if (req.readyState === 4) {
+            if (req.status === 200) {
+                podcastList = JSON.parse(req.responseText);
+                resolve([podcastList, categoryList]);
+            } else {
+                reject(req.statusText);
+            }
+        }
+    }
+req.send()});
+}
+
+/*************************************************************************
+ * This is to be run after getPodcasts. It takes an argument of the
+ * getPodcasts's result and returns an array with index 0 being the
+ * result from the getPodcasts function as well as the result of this
+ * function (if successful)
+ *************************************************************************/
+let getCategories = function(podcastList, categoryList){
+return new Promise(function(resolve, reject){
+    var req = new XMLHttpRequest();
+    req.open("GET", "/api/categories");
+    req.onload = function(){
+        if (req.readyState === 4) {
+            if (req.status === 200) {
+                categoryList = JSON.parse(req.responseText);
+                resolve([podcastList, categoryList]);
+            } else {
+                reject(req.statusText);
+            }
+        }
+    }
+req.send()});
+}
+
+/*************************************************************************
+ * After both getPodcasts and getCategories runs, this function updates
+ * the screen to represent the values taken from both API requests. 
+ * 
+ * This begins by parsing the category string 
+ *************************************************************************/
+let init = function(podcastList, categoryList){
+    for(var item in podcastList){
+        var name = podcastList[item]["name"];
+        console.log(name)
     }
 }
 
+
+//Promises logic
+getPodcasts(podcastList, categoryList).then(function(resArray){
+    return getCategories(resArray[0], resArray[1]);
+}).then(function(resArray){
+    init(resArray[0], resArray[1]);
+}).catch(function(err){
+    console.log("An error happened when checking the API" + err)
+});
+
+
+
+
+//____________________________________OTHER FUNCTIONS________________________________
 function menuClick(menu, index, element){
     //remove the active status from the other elements
     var ci = document.querySelectorAll(".colItem");
@@ -136,9 +211,9 @@ function menuClick(menu, index, element){
     //make the element in the menu look active
     element.classList.add("colItemActive");
     
+    document.querySelector(".catName").textContent = catg[index][0];
     document.querySelector(".cName").textContent = catg[index][0];
     document.querySelector(".cDescription").textContent = catg[index][1];
-
 }
 
 
