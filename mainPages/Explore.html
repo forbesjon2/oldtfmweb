@@ -52,12 +52,12 @@
         <!-- The list of items goes in here -->
         <div class="col mt-3 col-lg-8 col-md-9 col-sm-12 col-xs-12 overflow-auto" style="overflow-y: hidden;">
             <div class="row" style="overflow-y: hidden;" >
-                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
-                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
-                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-right border-light vh-100"></div>
-                <div style="z-index: 1000; overflow-y: hidden;" class="col col-lg-3 col-md-3 col-sm-3 col-xs-3 border-top border-light vh-100"></div>
-                <div class="header" style="z-index: 1200;-webkit-transform: rotate(-90deg);transform: rotate(-90deg);margin-top: 68px;margin-left: 10px;position: absolute;"><span class="noTextSelect catTitle">Category:</span></div>
-                <div class="header" style="z-index: 1200;margin-left: 125px;margin-top: 7px;position: absolute;"><span class="noTextSelect catName">Comedy</span></div>
+                <div class="border-top vh-100"></div>
+                <div id="listParent" class="container" style="position:absolute;">
+                    <div class="row header" style="-webkit-transform: rotate(-90deg);transform: rotate(-90deg);margin-top: 68px;margin-left: 10px;position: absolute;"><span class="noTextSelect catTitle">Category:</span></div>
+                    <div class="row header" style="margin-left: 125px;margin-top: 7px;position: absolute;"><span class="noTextSelect catName">Comedy</span></div>
+                    <div class="row" style="margin-top:210px;"></div>
+                </div>                
             </div>
         </div>
     </div>
@@ -67,6 +67,10 @@
 
 <!-- CSS -->
 <style>
+#listTitle{font-family: 'Didact Gothic', sans-serif;margin-top: 1vw;font-size: calc(16px + 0.9vw);width: calc(100% - 39%);}
+#listDesc{font-family: 'Didact Gothic', sans-serif;margin-top: calc(-2vw + 30px);width: 80%;font-size: calc(13px + 0.8vw);opacity: 0.7;position: absolute;align-self: center;}
+.listItemRight{margin-top: 7%;margin-right: 5%; justify-content: flex-end;}
+.listItemLeft{margin-top: 7%;margin-left: 5%; justify-content: flex-start;}
 .header{font-family: acumin-pro-extra-condensed, sans-serif;font-weight: 600;font-style: normal;font-size:350%;}
 .noTextSelect{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none; cursor: default;}
 #navButton{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;}
@@ -86,21 +90,7 @@ i:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: 
 a:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: black;}
 .icon0{height: 2em;width: 2em;opacity: 1;}        
 
-input{
-    -webkit-appearance: none;
-    font-family: 'Merriweather', serif;
-    font-weight: 400;
-    font-size: 37px;
-    height: 44px;
-    display: block;
-    min-width: 582px;
-    padding-left: 10px;
-    outline: none;
-    padding-top: 2px;
-    padding-right: 2px;
-    border-style: solid;
-    border-width: 0px 0px 1px 0px;
-    transition: 1s;
+input{-webkit-appearance: none;font-family: 'Merriweather', serif;font-weight: 400;font-size: 37px;height: 44px;display: block;min-width: 582px;padding-left: 10px;outline: none;padding-top: 2px;padding-right: 2px;border-style: solid;border-width: 0px 0px 1px 0px;transition: 1s;
 }
 .selectedInput{margin-bottom: 200px;transition: 1s;}
 .selectedIcon{margin-bottom: 215px;transition: 1s;}
@@ -187,11 +177,11 @@ let init = function(podcastList, categoryList){
         var name = podcastList[item]["name"];
     }
     for(var item in categoryList){
-        //add under popular in menu.
-        var popularSpan = document.createElement("div");
-        popularSpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #fff;border-bottom-color: #fff;" onclick="menuClick(1,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
-        var popularSpanParent = document.querySelector("#popularDiv");
-        popularSpanParent.appendChild(popularSpan);
+        //dont add under popular in menu.
+        // var popularSpan = document.createElement("div");
+        // popularSpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #fff;border-bottom-color: #fff;" onclick="menuClick(1,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
+        // var popularSpanParent = document.querySelector("#popularDiv");
+        // popularSpanParent.appendChild(popularSpan);
         //add under categories in menu.
         var categorySpan = document.createElement("div");
         categorySpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #000;border-bottom-color: #000;" onclick="menuClick(2,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
@@ -229,10 +219,48 @@ function menuClick(menu, index, element){
     //change the title and name of the heading
     document.querySelector(".catTitle").textContent = [menu == 1 ? "Popular:" : "Category:"];
     document.querySelector(".catName").textContent = element.textContent;
+    document.removeChild(document.querySelectorAll(".listItemRight"));
+    document.removeChild(document.querySelectorAll(".listItemLeft"));
+    var j = 0;
+    for(var itemCat in categoryList){
+        if(categoryList[itemCat]["category"]+ " " === element.textContent){
+            for(var itemPod in podcastList){
+                var tempList = podcastList[itemPod]["category"].split(",");
+                for(var i = 0; i < tempList.length-1; ++i){
+                    if(categoryList[itemCat]["id"] == tempList[i]){
+                        var count = podcastList[itemPod]["count"].toString();
+                        var id = podcastList[itemPod]["id"];
+                        var name = podcastList[itemPod]["name"].toString();;
+                        [name.length > 40 ? name = name.slice(0,40) + "..." : name = name];
+                        var imageURI = podcastList[itemPod]["imageuri"];
+                        var newDiv = document.createElement("div");
+                        [j%2==0 ? newDiv.setAttribute("class", "row listItemRight"): newDiv.setAttribute("class", "row listItemLeft")]
+                        var right = '<span id="listTitle" class="text-right" style="margin-right: calc(10px + 0.9vw);">' + name + '</span><span id="listDesc" class="text-right" style="padding-right: calc(20px + 25%);">' + count + ' episodes</span><img src="' + imageURI + '" height="30%" width="30%" style="max-height: 250px; max-width: 250px"/>';
+                        var left = '<img src="' + imageURI + '" height="30%" width="30%" style="max-height: 250px; max-width: 250px"/><span id="listTitle" class="text-left" style="margin-left: calc(10px + 0.9vw);">' + name + '</span><span id="listDesc" class="text-left" style="padding-left: calc(20px + 25%);">' + count + ' episodes</span>';
+                        [j%2==0 ? newDiv.innerHTML = right : newDiv.innerHTML = left]
+                        document.querySelector("#listParent").appendChild(newDiv);
+                        ++j;
+                    }
+                    // document.querySelector("#listParent").removeChild(document.querySelector(".listItemLeft"));
+                    // document.querySelector("#listParent").removeChild(document.querySelector("#mbDiv"));
+
+                }
+            }
+            var mbDiv = document.createElement("div");
+            mbDiv.setAttribute("class", "row");
+            mbdiv.setAttribute("id", "mbDiv");
+            mbDiv.setAttribute("style", "margin-bottom:210px;");
+            document.querySelector("#listParent").appendChild(mbDiv);
+            break;
+        }
+    }
+    // var categorySpan = document.createElement("div");
+    // categorySpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #000;border-bottom-color: #000;" onclick="menuClick(2,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
+    // var categorySpanParent = document.querySelector("#categoriesDiv");
+    // categorySpanParent.appendChild(categorySpan);
     
     // document.querySelector(".cName").textContent = catg[index][0];
     // document.querySelector(".cDescription").textContent = catg[index][1];
-    
 }
 
 
