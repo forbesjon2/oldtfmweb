@@ -24,14 +24,14 @@
 <div class="fixed-top container-flex shadow p-1 mb-5 bg-white rounded">
     <div class="row">
         <div class="col-lg-3 col-md-3 d-none d-md-block leftTitle" style="transform:rotate(0);">
-            someText.fm
+            transcript.fm
             <a href="/" class="stretched-link"></a>
         </div>
 
         <div id="navcenter" class="col-lg-6 col-md-6 centerTitle"></div>
         
         <div id="navright" class="col-lg-3 col-md-3 d-none d-md-block rightTitle" style="transform:rotate(0);">
-            <img src="https://www.omnycontent.com/d/playlist/a7b0bd27-d748-4fbe-ab3b-a6fa0049bcf6/392196e7-87cf-4af5-b31b-a89c01057741/2bab9367-8229-4d22-ad4c-a89c01057758/image.jpg?t=1520474383&size=Small" style="width:20px; height:20px"/>
+            <img id="smallImg" src="" style="width:20px; height:20px"/>
             <span id="podcastName"></span>
             <a href="#" class="stretched-link"></a>
         </div>
@@ -55,7 +55,7 @@
 <div id="description" class="container content">
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-5 col-6">
-            <img id="mainIMG" src="https://www.omnycontent.com/d/playlist/a7b0bd27-d748-4fbe-ab3b-a6fa0049bcf6/392196e7-87cf-4af5-b31b-a89c01057741/2bab9367-8229-4d22-ad4c-a89c01057758/image.jpg?t=1520474383&size=Small" class="img-fluid" alt="Responsive image"/>
+            <img id="mainImg" src="" class="img-fluid" alt="Responsive image"/>
         </div>
         <div class="col-lg-9 col-md-8 col-sm-7 col-6 ">
             <div id="descTitle" class="row "></div>
@@ -63,7 +63,7 @@
         </div>
     </div>
     <div id="subDesc" class="mt-4 col">
-        <div class="row">Date: {{date}}</div>
+        <div id="d8" class="row"></div>
         <div id="duration" class="row">Duration: </div>
     </div>
     
@@ -83,9 +83,6 @@
 .leftTitle{
     font-family: 'Merriweather', serif;
     font-weight: 700;
-    font-size: 2vw;
-    font-size: 4vmax;
-    font-size: 2vmin;
     text-align: right;
     align-self: center;
     padding-right: 5%;
@@ -99,11 +96,9 @@
 }
 .rightTitle{
     font-family: 'Merriweather', serif;
-    font-size: 2vw;
-    font-size: 4vmax;
-    font-size: 2vmin;
     font-weight:400;
     text-align: center;
+    font-size: calc(3px + 0.9vw);
     align-self: center;
 }
 .content{
@@ -114,11 +109,8 @@
 #descTitle{
     font-family: 'Merriweather', serif;
     font-weight: 700;
-    font-size: 4vw;
-    font-size: 8vmax;
-    font-size: 4vmin;
+    font-size: calc(8px + 1vw);
     margin-bottom: 5%;
-    
 }
 #descContent{
     font-family: 'Source Serif Pro', serif;
@@ -134,8 +126,9 @@
     font-size: 100%;
 }
 #floatingContainer{
-    width: 20px;
-    height: 20px;
+    width: 50px;
+    background-color: #ffffffbb;
+    border-radius: 4px;
     top: 50%;
     margin-left: 20px;
     font-family: 'Merriweather', serif;
@@ -221,7 +214,11 @@ getTranscription(id).then(function(response){
     document.querySelector("#descContent").textContent = response[0].description;
     document.querySelector("#podcastName").textContent = response[0].podcastname;
     document.querySelector("#descTitle").textContent = response[0].title;
-    document.querySelector("#mainIMG").attributes.src = "arg";
+    document.querySelector("#d8").textContent = "Date: " + response[0].date.split("T")[0];
+    document.querySelector("#mainImg").src = response[0].imageuri;
+    document.querySelector("#smallImg").src = response[0].imageuri;
+
+    // document.querySelector("#mainIMG").attributes.src = "arg";
     document.querySelector("#navcenter").textContent = response[0].title; 
     document.querySelector("#duration").textContent = "Duration: " + (Math.floor(response[0].duration / 60)) + " minutes";
 

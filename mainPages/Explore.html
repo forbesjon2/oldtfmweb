@@ -33,10 +33,7 @@
     <div class="row">
         <!-- The menu bar (categories and popular tabs go here) -->
         <div class="col mt-3 col-lg-2 col-md-3 d-none d-md-block mainCol vh-100" style="max-width: 280px; min-width: 15px;">
-            <div id="popularDiv" class="noTextSelect position-absolute menuSelect vh-100" style="background-color: #5B5A4D;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
-                <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #fff;">popular</span>
-            </div>
-            <div id="categoriesDiv" class="noTextSelect position-absolute menuDeselect vh-100" style="background-color: #F2F2F2;width: 100%;top: 0px;left: 0px;border-radius: 4px;" onclick="ms(this);">
+            <div id="categoriesDiv" class="noTextSelect position-absolute vh-100" style="background-color: #F2F2F2;width: 100%;top: 0px;left: 0px;">
                 <span class="row mb-2 mt-2 colText justify-content-center mx-auto" style="color: #000;">categories</span>
             </div>
         </div>
@@ -54,8 +51,8 @@
             <div class="row" style="overflow-y: hidden;" >
                 <div class="border-top vh-100"></div>
                 <div id="listParent" class="container" style="position:absolute;">
-                    <div class="row header" style="-webkit-transform: rotate(-90deg);transform: rotate(-90deg);margin-top: 68px;margin-left: 10px;position: absolute;"><span class="noTextSelect catTitle">Category:</span></div>
-                    <div class="row header" style="margin-left: 125px;margin-top: 7px;position: absolute;"><span class="noTextSelect catName">Comedy</span></div>
+                    <div class="row header" style="-webkit-transform: rotate(-90deg);transform: rotate(-90deg);margin-top: 68px;margin-left: 10px;position: absolute;"><span class="noTextSelect catTitle"></span></div>
+                    <div class="row header" style="margin-left: 125px;margin-top: 7px;position: absolute;"><span class="noTextSelect catName"></span></div>
                     <div class="row" style="margin-top:210px;"></div>
                 </div>                
             </div>
@@ -69,13 +66,11 @@
 <style>
 #listTitle{font-family: 'Didact Gothic', sans-serif;margin-top: 1vw;font-size: calc(16px + 0.9vw);width: calc(100% - 39%);}
 #listDesc{font-family: 'Didact Gothic', sans-serif;margin-top: calc(-2vw + 30px);width: 80%;font-size: calc(13px + 0.8vw);opacity: 0.7;position: absolute;align-self: center;}
-.listItemRight{margin-top: 7%;margin-right: 5%; justify-content: flex-end;}
-.listItemLeft{margin-top: 7%;margin-left: 5%; justify-content: flex-start;}
+.listItemRight{margin-top: 7%;margin-right: 5%; justify-content: flex-end;transform: rotate(0);}
+.listItemLeft{margin-top: 7%;margin-left: 5%; justify-content: flex-start;transform: rotate(0);}
 .header{font-family: acumin-pro-extra-condensed, sans-serif;font-weight: 600;font-style: normal;font-size:350%;}
 .noTextSelect{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none; cursor: default;}
 #navButton{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;}
-.menuSelect{margin-top: 50px; z-index: 500;}
-.menuDeselect{margin-top: 0px; z-index: 100;}
 .cName{font-family: 'Didact Gothic', sans-serif;font-size: 200%;width:100%;}
 .cDescription{font-family: 'Didact Gothic', sans-serif;font-size: 100%;}
 .mainCol{border: 1px 0px 0px 0px rgba(0, 0, 0, 0.041);padding:0;}
@@ -89,7 +84,7 @@ i:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: 
 .active{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: black;}
 a:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: black;}
 .icon0{height: 2em;width: 2em;opacity: 1;}        
-
+.mbDiv{margin-bottom:210px;}
 input{-webkit-appearance: none;font-family: 'Merriweather', serif;font-weight: 400;font-size: 37px;height: 44px;display: block;min-width: 582px;padding-left: 10px;outline: none;padding-top: 2px;padding-right: 2px;border-style: solid;border-width: 0px 0px 1px 0px;transition: 1s;
 }
 .selectedInput{margin-bottom: 200px;transition: 1s;}
@@ -111,9 +106,6 @@ input{-webkit-appearance: none;font-family: 'Merriweather', serif;font-weight: 4
 </style>
 
 <script>
-var catg = [["Comedy", "In a modern sense, comedy refers to any discourse or work generally intended to be humorous or amusing by inducing laughter, especially in theatre, television, film, stand-up comedy, or any other medium of entertainment."],
-            ["Arts", "Two"], ["News", "Three"]];
-var popu = ["Providers", "Podcasts", "Categories"];
 //____________________________________INITIALIZATION________________________________
 var podcastList;
 var categoryList;
@@ -177,21 +169,11 @@ let init = function(podcastList, categoryList){
         var name = podcastList[item]["name"];
     }
     for(var item in categoryList){
-        //dont add under popular in menu.
-        // var popularSpan = document.createElement("div");
-        // popularSpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #fff;border-bottom-color: #fff;" onclick="menuClick(1,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
-        // var popularSpanParent = document.querySelector("#popularDiv");
-        // popularSpanParent.appendChild(popularSpan);
-        //add under categories in menu.
         var categorySpan = document.createElement("div");
         categorySpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #000;border-bottom-color: #000;" onclick="menuClick(2,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
         var categorySpanParent = document.querySelector("#categoriesDiv");
         categorySpanParent.appendChild(categorySpan);
     }
-    // var hiddenList = document.body.createElement("div");
-    // hiddenList.innerHTML('<span class=')
-    // var hiddenPodcastList = document.body.createElement("div");
-    
 }
 
 
@@ -219,60 +201,44 @@ function menuClick(menu, index, element){
     //change the title and name of the heading
     document.querySelector(".catTitle").textContent = [menu == 1 ? "Popular:" : "Category:"];
     document.querySelector(".catName").textContent = element.textContent;
-    document.removeChild(document.querySelectorAll(".listItemRight"));
-    document.removeChild(document.querySelectorAll(".listItemLeft"));
+    // document.removeChild(document.querySelectorAll(".listItemRight"));
+    // document.removeChild(document.querySelectorAll(".listItemLeft"));
     var j = 0;
+    removeListElements();
     for(var itemCat in categoryList){
         if(categoryList[itemCat]["category"]+ " " === element.textContent){
             for(var itemPod in podcastList){
-                var tempList = podcastList[itemPod]["category"].split(",");
-                for(var i = 0; i < tempList.length-1; ++i){
-                    if(categoryList[itemCat]["id"] == tempList[i]){
-                        var count = podcastList[itemPod]["count"].toString();
-                        var id = podcastList[itemPod]["id"];
-                        var name = podcastList[itemPod]["name"].toString();;
-                        [name.length > 40 ? name = name.slice(0,40) + "..." : name = name];
-                        var imageURI = podcastList[itemPod]["imageuri"];
-                        var newDiv = document.createElement("div");
-                        [j%2==0 ? newDiv.setAttribute("class", "row listItemRight"): newDiv.setAttribute("class", "row listItemLeft")]
-                        var right = '<span id="listTitle" class="text-right" style="margin-right: calc(10px + 0.9vw);">' + name + '</span><span id="listDesc" class="text-right" style="padding-right: calc(20px + 25%);">' + count + ' episodes</span><img src="' + imageURI + '" height="30%" width="30%" style="max-height: 250px; max-width: 250px"/>';
-                        var left = '<img src="' + imageURI + '" height="30%" width="30%" style="max-height: 250px; max-width: 250px"/><span id="listTitle" class="text-left" style="margin-left: calc(10px + 0.9vw);">' + name + '</span><span id="listDesc" class="text-left" style="padding-left: calc(20px + 25%);">' + count + ' episodes</span>';
-                        [j%2==0 ? newDiv.innerHTML = right : newDiv.innerHTML = left]
-                        document.querySelector("#listParent").appendChild(newDiv);
-                        ++j;
-                    }
-                    // document.querySelector("#listParent").removeChild(document.querySelector(".listItemLeft"));
-                    // document.querySelector("#listParent").removeChild(document.querySelector("#mbDiv"));
-
+                if(podcastList[itemPod]["category"].split(",").includes(categoryList[itemCat]["id"])){
+                    var id = podcastList[itemPod]["id"];
+                    var name = podcastList[itemPod]["name"].toString();;
+                    [name.length > 40 ? name = name.slice(0,40) + "..." : name = name];
+                    var imageURI = podcastList[itemPod]["imageuri"];
+                    var newDiv = document.createElement("div");
+                    [j%2==0 ? newDiv.setAttribute("class", "row listItemRight"): newDiv.setAttribute("class", "row listItemLeft")]
+                    var right = '<span id="listTitle" class="text-right" style="margin-right: calc(10px + 0.9vw);">' + name + '</span><a class="stretched-link" href="/show/' + id + '"></a><span id="listDesc" class="text-right" style="padding-right: calc(100px + 11vw);">' + podcastList[itemPod]["count"].toString() + ' episodes</span><img src="' + imageURI + '" height="30%" width="30%" style="max-height: 250px; max-width: 250px"/>';
+                    var left = '<img src="' + imageURI + '" height="30%" width="30%" style="max-height: 250px; max-width: 250px"/><span id="listTitle" class="text-left" style="margin-left: calc(10px + 0.9vw);">' + name + '</span><a class="stretched-link" href="/show/' + id + '"></a><span id="listDesc" class="text-left" style="padding-left: calc(100px + 11vw);">' + podcastList[itemPod]["count"].toString() + ' episodes</span>';
+                    [j%2==0 ? newDiv.innerHTML = right : newDiv.innerHTML = left]
+                    document.querySelector("#listParent").appendChild(newDiv);
+                    ++j;
                 }
             }
             var mbDiv = document.createElement("div");
-            mbDiv.setAttribute("class", "row");
-            mbdiv.setAttribute("id", "mbDiv");
-            mbDiv.setAttribute("style", "margin-bottom:210px;");
+            mbDiv.setAttribute("class", "row mbDiv");
             document.querySelector("#listParent").appendChild(mbDiv);
             break;
         }
     }
-    // var categorySpan = document.createElement("div");
-    // categorySpan.innerHTML = '<span class="row colItem justify-content-center mx-auto" style="color: #000;border-bottom-color: #000;" onclick="menuClick(2,' + item + ', this);">' + categoryList[item]["category"] + ' </span>';
-    // var categorySpanParent = document.querySelector("#categoriesDiv");
-    // categorySpanParent.appendChild(categorySpan);
-    
-    // document.querySelector(".cName").textContent = catg[index][0];
-    // document.querySelector(".cDescription").textContent = catg[index][1];
 }
 
-
-function ms(element){
-    if(element.classList.contains("menuDeselect")){
-        var a = document.querySelector(".menuSelect");
-        var b = document.querySelector(".menuDeselect");
-        a.classList.remove("menuSelect");
-        a.classList.add("menuDeselect");
-        b.classList.add("menuSelect");
-        b.classList.remove("menuDeselect");
+function removeListElements(){
+    var els = [document.querySelectorAll(".listItemRight").length, document.querySelectorAll(".listItemLeft").length, document.querySelectorAll(".mbDiv").length];
+    var elsText = [".listItemRight", ".listItemLeft", ".mbDiv"];
+    for(var j in els){
+        for(var i = 0; i < els[j]; ++i){
+            document.querySelector("#listParent").removeChild(document.querySelector(elsText[j]));
+        }
     }
+    
 }
 </script>
 </body>
