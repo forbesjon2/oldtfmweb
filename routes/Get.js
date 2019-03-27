@@ -34,7 +34,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/home.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Home.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -105,6 +105,21 @@ class Routes{
                 res.end(fs.readFileSync("./mainPages/Search.html", {encoding: 'utf-8'}));
             }
         })
+
+        /**********************************************************************
+         * The search page of transcript.fm. Any query is technically valid
+         * however its sanitized later on in the API. Note: the query is 
+         * sent via a POST request on page load
+         **********************************************************************/
+        this.webServer.get("/show/:id", (res, req) =>{
+            res.onAborted(() =>{
+                res.onAborted = true;
+            });
+            if(!res.onAborted){
+                res.end(fs.readFileSync("./mainPages/Show.html", {encoding: 'utf-8'}));
+            }
+        });
+
         return this.webServer;
     }
 
@@ -186,7 +201,7 @@ class Routes{
             if(!validator.isNumeric(id) && !res.aborted){
                 res.end("err");
             }else{
-                this.pool.query("SELECT t.transcription, t.description, t.podcastname, t.title, p.imageuri, t.duration FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.id = " + id + " LIMIT 1;", (err, queryResult) =>{
+                this.pool.query("SELECT t.transcription, t.description, t.podcastname, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.id = " + id + " LIMIT 1;", (err, queryResult) =>{
                     if(!err && !res.aborted) {
                         res.end(JSON.stringify(queryResult.rows));
                     }
