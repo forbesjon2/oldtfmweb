@@ -34,7 +34,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Home.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Home2.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -52,7 +52,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Explore.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Explore2.html", {encoding: 'utf-8'}));
             }
         });
 
