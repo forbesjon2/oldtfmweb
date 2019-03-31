@@ -20,7 +20,7 @@
 <body>
 <div class="container-fluid" style="padding:0px;">
     <!-- NavBar -->
-    <div id="row navBar" class="pt-3 row">
+    <div id="row navBar" style="height: 70px;" class="pt-3 row">
         <div class="col" style="cursor:default;max-width:fit-content;padding-right: 0px;"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:none;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text id="navButton" class="cls-2" transform="translate(2 31.47)">T</text><text id="navButton" class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg></div>
         <div class="col col-lg-6 col-md-6 col-sm-3 col-xs-1" style="padding-left:8px;">
             <!-- Breadcrumbs -->
@@ -40,33 +40,68 @@
         </div>
     </div>
 
-
-    <!-- <div class="row">
-        <div class="col col-lg-2 col-md-2 d-none d-md-block vh-100">
-            <div id="categoriesDiv" class="noTextSelect position-absolute vh-100" style="width: fit-content;top: 0px;left: 0px;">
-                <span class="row mb-2 mt-2 colText justify-content-left mx-auto" style="color:rgb(250,40,87);">CATEGORIES</span>
-            </div>
-        </div>
-
-        <div class="col mt-3 col-lg-10 col-md-10 col-sm-5 col-xs-4 overflow-auto" style="overflow-y: hidden;">
-            <div class="row">ss</div>
-        </div>
-    </div> -->
-
     <!-- The Page content all is inside this row -->
     <div class="row">
+        
         <!-- The menu bar (categories and popular tabs go here) -->
-        <!-- <div class="col vh-100"> -->
-            <div id="categoriesDiv" class="noTextSelect position-absolute" style="width: 200px;left: 0px;padding-left: 15px;">
-                <span class="row mb-2 mt-2 colText justify-content-left mx-auto" style="color:rgb(250,40,87);">CATEGORIES</span>
-            </div>
-        <!-- </div> -->
+        <div id="categoriesDiv" style="z-index: 50; transition: 0.5s;height:100%;">
+            <svg id="menuIcon" onclick="activateMenu(event);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 16"><title>menu</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><line style="fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:2px;" y1="1" x2="19" y2="1"/><line style="fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:2px;" y1="8" x2="32" y2="8"/><line style="fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:2px;" x1="13" y1="15" x2="32" y2="15"/></g></g></svg>
+            <span class="row mb-2 colText justify-content-left mx-auto" style="color:rgb(250,40,87);">CATEGORIES</span>
+        </div>
         
         <!-- The list of items goes in here -->
-        <div class="row overflow-auto" style="overflow-y: hidden;margin-left: 200px; justify-content: center;">
-            <div class="col tile bg-primary">a</div>
-            <div class="col tile bg-secondary">vvv</div>
-            
+        <div id="contentPane" class="row overflow-auto">
+            <div class="col tile" style="background-color: #07FFBD;color: black;">
+                <div id="tileTitle" class="row">Title</div>
+                <div id="tileContent" class="row">descLineOne<br>descLineTwo</div>
+                <div class="row pt-2">
+                    <div id="tileSubContent" style="font-weight: 800;"class="col text-left">price</div>
+                    <div id="tileSubContent" style="font-weight: 100;"class="col text-right">company</div>
+                </div>
+            </div>
+
+            <div class="col tile" style="background-color: #231F20;color: white;">
+                <div id="tileTitle" class="row">Title</div>
+                <div id="tileContent" class="row">descLineOne<br>descLineTwo</div>
+                <div class="row pt-2">
+                    <div id="tileSubContent" style="font-weight: 800;"class="col text-left">price</div>
+                    <div id="tileSubContent" style="font-weight: 100;"class="col text-right">company</div>
+                </div>
+            </div>
+            <div class="col tile" style="background-color: #3B52A0;color: white;">
+                <div id="tileTitle" class="row">Title</div>
+                <div id="tileContent" class="row">descLineOne<br>descLineTwo</div>
+                <div class="row pt-2">
+                    <div id="tileSubContent" style="font-weight: 800;"class="col text-left">price</div>
+                    <div id="tileSubContent" style="font-weight: 100;"class="col text-right">company</div>
+                </div>
+            </div>
+            <div class="col tile" style="background-color: #855994;color: white;">
+                <div id="tileTitle" class="row">Title</div>
+                <div id="tileContent" class="row">descLineOne<br>descLineTwo</div>
+                <div class="row pt-2">
+                    <div id="tileSubContent" style="font-weight: 800;"class="col text-left">price</div>
+                    <div id="tileSubContent" style="font-weight: 100;"class="col text-right">company</div>
+                </div>
+            </div>
+            <div class="col tile" style="background-color: #08E8FF;color: black;">
+                <div id="tileTitle" class="row">Title</div>
+                <div id="tileContent" class="row">descLineOne<br>descLineTwo</div>
+                <div class="row pt-2">
+                    <div id="tileSubContent" style="font-weight: 800;"class="col text-left">price</div>
+                    <div id="tileSubContent" style="font-weight: 100;"class="col text-right">company</div>
+                </div>
+            </div>
+            <div class="col tile" style="background-color: #525C9C;color: white;">
+                <div id="tileTitle" class="row">Title</div>
+                <div id="tileContent" class="row">descLineOne<br>descLineTwo</div>
+                <div class="row pt-2">
+                    <div id="tileSubContent" style="font-weight: 800;"class="col text-left">price</div>
+                    <div id="tileSubContent" style="font-weight: 100;"class="col text-right">company</div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 
@@ -75,6 +110,7 @@
 
 <!-- CSS -->
 <style>
+.tile{min-width:250px;max-width:250px;min-height: 250px;max-height: 250px;border-radius: 6px;margin: 10px;}
 .breadcrumb-item{font-family: acumin-pro, sans-serif;
 font-weight: 300;
 font-style: normal;}
@@ -87,10 +123,14 @@ i{color: black; opacity: 0.7; margin-left: -20px;}
 .colText{font-family: acumin-pro-semi-condensed, sans-serif;font-weight: 500;font-style: normal;width:100%;cursor: default;}
 .colItem + .colItemActive{opacity: 1;font-weight: 700;}
 .colItem:hover{opacity: 1;}
-.colItem{font-family: acumin-pro, sans-serif;font-weight: 300;font-style: normal;font-size: 87%;opacity: 0.7;cursor: pointer;line-height: 20px; width: max-content;margin-bottom: 4px;padding-bottom: 5px;}
-.tile{min-width: 300px;max-width: 300px;}
+.colItem{font-family: acumin-pro, sans-serif;font-weight: 300;font-style: normal;font-size: 87%;opacity: 0.7;cursor: pointer;line-height: 20px; width: max-content;padding-bottom: 5px;}
+#tileTitle{font-family: acumin-pro-extra-condensed, sans-serif;font-weight: 500;padding-top: 17px;font-style: normal;font-size: 34px;border-bottom: 1px solid;height: 110px;line-height: 36px;padding-bottom: 17px;opacity: 0.9;}
 #backButton{visibility:hidden;width: 0px;}
-
+#contentPane{overflow-y: hidden;margin-left: 200px; justify-content: center;}
+#categoriesDiv{width: 200px;left: 0px;padding-left: 15px;position: absolute;background-color: white;opacity: 0.92;-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none; cursor: default;}
+#menuIcon{height:25px;width:25px;margin-left: 150px;transition: 0.5s;visibility: hidden;position: absolute;}
+#tileContent{font-family: acumin-pro, sans-serif;font-weight: 300;font-style: normal;opacity: 0.9;padding-top: 17px;height: 95px;}
+#tileSubContent{font-family: acumin-pro, sans-serif;font-style: normal;opacity: 0.9;padding:0px;}
 
 #listTitle{font-family: acumin-pro-semi-condensed, sans-serif;font-weight:500;margin-top: 1vw;font-size: calc(16px + 0.9vw);width: calc(100% - 39%);}
 #listDesc{font-family: 'Didact Gothic', sans-serif;margin-top: calc(-2vw + 30px);width: 80%;font-size: calc(13px + 0.8vw);opacity: 0.7;position: absolute;align-self: center;}
@@ -105,8 +145,15 @@ i{color: black; opacity: 0.7; margin-left: -20px;}
 
 
 @media(max-width:820px){   
-    #categoriesDiv{
-        width: 20px;
+    #categoriesDiv:not(.divActive){left: -145px;}
+    #categoriesDiv.divActive{left: 0px;}
+    #contentPane{
+        margin-left: 70px;
+    }
+    
+    #menuIcon{
+        visibility: visible;
+        
     }
     .breadcrumb-item{
         visibility: hidden;
@@ -116,6 +163,8 @@ i{color: black; opacity: 0.7; margin-left: -20px;}
         visibility: visible;
     }
 }
+
+
 
 .icon0{height: 2em;width: 2em;opacity: 1;}        
 .mbDiv{margin-bottom:210px;}
@@ -277,7 +326,14 @@ function removeListElements(){
     }
 }
 
-
+function activateMenu(){
+    var el = document.querySelector("#categoriesDiv");
+    if(el.hasAttribute("class", "divActive")){
+        el.removeAttribute("class", "divActive");
+    }else{
+        el.setAttribute("class","divActive");
+    }
+}
 </script>
 </body>
 </html>
