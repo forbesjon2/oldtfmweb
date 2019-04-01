@@ -17,14 +17,17 @@ class Routes{
      * secondary routes (see below)
      * 
      * 
-     * PRIMARY ROUTES: everything that will appear in the navbar. This
-     * includes account, explore, contact, and account. This includes
-     * the homepage.
+     * PRIMARY ROUTES: all items here have a url path of 1.
+     * includes account, explore, contact, account & the homepage.
      * 
-     * SECONDARY ROUTES: Everything that doesnt appear in the navbar.
+     * 
+     * SECONDARY ROUTES: Everything else with a path greater than 2
      * navigations to this page usually happens when you interact with
      * a part of the website. These routes are usually documented unlike
      * the primary routes
+     * 
+     * Example: /Explore is a primary route, 
+     * /explore/<something> is a secondary route
      **********************************************************************/
     attachGetRoutes(){
 //______________________________________PRIMARY ROUTES_____________________________________________________
@@ -56,6 +59,7 @@ class Routes{
             }
         });
 
+        
         this.webServer.get("/contact", (res,req) =>{
             res.onAborted(()=> {
                 res.aborted = true;
@@ -120,6 +124,24 @@ class Routes{
             }
         });
 
+        this.webServer.get("/explore/:ds", (res,req) =>{
+            res.onAborted(()=> {
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/ExploreSecondary.html", {encoding: 'utf-8'}));
+            }
+        });
+
+        //______________________________________TERTIARY ROUTES_____________________________________________________
+        this.webServer.get("/explore/:ds/:ds2", (res,req) =>{
+            res.onAborted(()=> {
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/ExploreTertiary.html", {encoding: 'utf-8'}));
+            }
+        });
         return this.webServer;
     }
 
@@ -146,7 +168,7 @@ class Routes{
          * transcriptions, the podcast name, the image url, the category, 
          * and the id (an array of comma separated integers)
          **********************************************************************/
-        this.webServer.get("/api/podcasts", (res, req) => {
+        this.webServer.get("/api/Itunes%20top%20100%20podcasts", (res, req) => {
             res.onAborted(()=> {
                 res.aborted = true;
             });
@@ -190,18 +212,41 @@ class Routes{
 
 
 
+        // /**********************************************************************
+        //  * This is to be used as an API route from /transcription/:id route
+        //  **********************************************************************/
+        // this.webServer.get("/api/Itunes%20top%20100%20podcasts/:name", (res,req) => {
+        //     res.onAborted(() =>{
+        //         res.aborted = true;
+        //     });
+        //     var name = decodeURI(req.getParameter("id"));
+        //     if(!validator.isAlphanumeric(name) && !res.aborted){
+        //         res.end("error, not alphanumeric");
+        //     }else{
+        //         this.pool.query("SELECT t.transcription, t.description, t.podcastname, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.podcastname = " + name + " LIMIT 1;", (err, queryResult) =>{
+        //             if(!err && !res.aborted) {
+        //                 res.end(JSON.stringify(queryResult.rows));
+        //             }
+        //             else if(err && !res.aborted){
+        //                 res.end("err" + err);
+        //             }
+        //         });
+        //     }
+        // })
+
+
         /**********************************************************************
          * This is to be used as an API route from /transcription/:id route
          **********************************************************************/
-        this.webServer.get("/podcast/:id", (res,req) => {
+        this.webServer.get("/api/Itunes%20top%20100%20podcasts/:name", (res,req) => {
             res.onAborted(() =>{
                 res.aborted = true;
             });
-            var id = req.getParameter("id");
-            if(!validator.isNumeric(id) && !res.aborted){
-                res.end("err");
+            var name = decodeURI(req.getParameter("name"));
+            if(!validator.isAlphanumeric(name.replace(/ /g, "")) && !res.aborted){
+                res.end("error, not alphanumeric");
             }else{
-                this.pool.query("SELECT t.transcription, t.description, t.podcastname, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.id = " + id + " LIMIT 1;", (err, queryResult) =>{
+                this.pool.query("SELECT p.description, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE lower(t.podcastname) = '" + name.toLowerCase() + "' GROUP BY p.description, p.imageuri, t.title, t.duration, t.date;", (err, queryResult) =>{
                     if(!err && !res.aborted) {
                         res.end(JSON.stringify(queryResult.rows));
                     }
@@ -212,8 +257,6 @@ class Routes{
             }
         })
 
-
-        
         return this.webServer;
     }
 }
