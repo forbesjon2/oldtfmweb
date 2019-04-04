@@ -4,17 +4,14 @@
  * to protect forom SQL injection in case malicious sequences are attempted 
  */
 const validator = require('validator');
-// ------------------query return fields
-// command, rowCount, oid, rows, fields, _parsers, RowCtor, rowAsArray, _getTypeParser, addCommandComplete, _parseRowAsArray, parseRow, addRow, addFields
-
-/**
- * This returns an array (as string) of index values that match the query provided
- * and returns false if something happened
+/*************************************************************************
+ * This returns an array (as string) of index values that match the query 
+ * provided and returns false if something happened
  * 
  * @param {String} query The words you want to index
  * @param {Int} numResults The max number of results that you want to be listed 
  * @param {pg} pool The instance of postgres pool
- */
+ **************************************************************************/
 function indexRankQuery(query, numResults, pool){
     const preparedQuery =  {
         name: "index-query",
@@ -47,7 +44,9 @@ function indexRankQuery(query, numResults, pool){
 
 
 
-/**
+
+
+/*************************************************************************
  * Takes the array of id's from indexRankQuery  as well as the original
  * query and highlights the results. Returns false if something bad happened
  * 
@@ -55,10 +54,10 @@ function indexRankQuery(query, numResults, pool){
  * @param {String} query the query text
  * @param {pg} pool postgres client pool
  * @param {res} res response
- */
+ **************************************************************************/
 function indexRankAndHighlightQuery(query, numResults, pool, res){
     const preparedRankQuery =  {
-        name: "index-query",
+        name: "rank-query",
         text: "SELECT id FROM transcriptions WHERE tsv @@ plainto_tsquery($1) ORDER BY ts_rank_cd(tsv, plainto_tsquery($1)) DESC LIMIT $2;",
         values: [query, numResults]
     };
@@ -87,7 +86,7 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
             try{
                 pool.query(preparedHighlightQuery, (err, qr) => {
                     if(!err){
-                        resolve(JSON.stringify(qr.rows, ));
+                        resolve(JSON.stringify(qr.rows));
                     }else{
                         reject("Error in runH" + err);
                     }
@@ -97,7 +96,6 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
             }
             
         })}
-
     var resultStr = "[";
 
     
@@ -117,5 +115,51 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
 
 
 
-module.exports = {indexRankQuery, indexRankAndHighlightQuery};
+/*************************************************************************
+ * Gets the list of shows given a podcast name. We use prepared statments
+ * for this to avoid SQL injection attacks and allow for special characters
+ * 
+ *************************************************************************/
+function getPodcastDetails(podcastName, pool){
+    return new Promise(function(resolve, reject){
+        try{
+            const preparedQuery = {
+                name:"podcast-details",
+                text: "SELECT p.description, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.podcastname = $1 GROUP BY p.description, p.imageuri, t.title, t.duration, t.date;",
+                values: [podcastName]};
+            pool.query(preparedQuery, (err, qr) =>{
+                if(!err){
+                    resolve(JSON.stringify(qr.rows));
+                }else{
+                    reject("Error in getPodcastDetails query" + err);
+                }
+            })
+        }catch(e){
+            reject("getPodcastDetails issue " + e);
+        }
+    })
+}
 
+/*************************************************************************
+ * This is used in the POST route /transcription. It requires a podcastName
+ * and a showName and uses prepared statements to run the query safely. 
+ * Returns transcription, title, description, imageuri, and duration in
+ * JSON format
+ *************************************************************************/
+function getTranscription(podcastName, showName, pool){
+    return new Promise(function(resolve, reject){
+        const preparedQuery = {
+            name:"transcription-details",
+            text:"SELECT t.transcription, t.title, t.description, p.imageuri, t.duration, t.date from transcriptions AS t JOIN podcasts AS p ON t.podcastname = p.name WHERE t.podcastname = $1 AND t.title LIKE $2 LIMIT 1;",
+            values: [podcastName, showName + "%"]};
+        pool.query(preparedQuery, (err, qr) =>{
+            if(!err){
+                resolve(JSON.stringify(qr.rows));
+            }else{
+                reject("Error in getTranscription query");
+            }
+        })
+    });
+}
+
+module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription};
