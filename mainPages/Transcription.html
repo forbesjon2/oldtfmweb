@@ -33,7 +33,7 @@
         <div id="navright" class="col-lg-3 col-md-3 d-none d-md-block rightTitle" style="transform:rotate(0);">
             <img id="smallImg" src="" style="width:20px; height:20px"/>
             <span id="podcastName"></span>
-            <a href="#" class="stretched-link"></a>
+            <a id="podcastHome" href="#" class="stretched-link"></a>
         </div>
     </div>
 </div>
@@ -55,7 +55,7 @@
 <div id="description" class="container content">
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-5 col-6">
-            <img id="mainImg" src="" class="img-fluid" alt="Responsive image"/>
+            <img id="mainImg" src="" class="img-fluid" />
         </div>
         <div class="col-lg-9 col-md-8 col-sm-7 col-6 ">
             <div id="descTitle" class="row "></div>
@@ -172,6 +172,8 @@
 
 
 <script>
+
+
 // Event listeners
 function archaic(num){
     document.querySelector(".floatingTextTimer").textContent = "0:0" + num;
@@ -191,10 +193,14 @@ function calculateElapsed(index, wpm){
 
 
 // document.querySelector("#main").textContent
-let getTranscription = function(id){
+let getTranscription = function(){
     return new Promise(function(resolve, reject){
+        var path = window.location.href.split("/");
+        var c1 = decodeURI(path[path.length-2]);
+        var c2 = decodeURI(path[path.length-1]);
         var req = new XMLHttpRequest();
-        req.open("GET", "/podcast/" + id);
+        req.open("POST", "/transcription");
+        req.send(JSON.stringify({"c1": c1, "c2": c2}));
         req.onload = function(){
             if (req.readyState === 4) {
                 if (req.status === 200) {
@@ -204,21 +210,19 @@ let getTranscription = function(id){
                 }
             }
         }
-        req.send()
         });
 }
 
-var id = decodeURI(window.location.toString().split("transcription/")[1]);
-getTranscription(id).then(function(response){
-    //transcription, description(descContent), podcastname(podcastName), title(descTitle), imageuri(mainIMG), duration
+getTranscription().then(function(response){
+    var path = window.location.href.split("/");
     document.querySelector("#descContent").textContent = response[0].description;
-    document.querySelector("#podcastName").textContent = response[0].podcastname;
+    document.querySelector("#podcastName").textContent = decodeURI(path[path.length-2]);
     document.querySelector("#descTitle").textContent = response[0].title;
     document.querySelector("#d8").textContent = "Date: " + response[0].date.split("T")[0];
     document.querySelector("#mainImg").src = response[0].imageuri;
     document.querySelector("#smallImg").src = response[0].imageuri;
-
-    // document.querySelector("#mainIMG").attributes.src = "arg";
+    
+    document.querySelector("#podcastHome").setAttribute("href", "/" + window.location.pathname.split("/").slice(1,4).join("/"));
     document.querySelector("#navcenter").textContent = response[0].title; 
     document.querySelector("#duration").textContent = "Duration: " + (Math.floor(response[0].duration / 60)) + " minutes";
 

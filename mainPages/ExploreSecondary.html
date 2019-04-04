@@ -21,18 +21,18 @@
 <div class="container-fluid" style="padding:0px;">
     <!-- NavBar -->
     <div id="row navBar" style="height: 70px;" class="pt-3 row">
-        <div class="col" style="cursor:default;max-width:50px;padding-right: 0px;"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:none;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text id="navButton" class="cls-2" transform="translate(2 31.47)">T</text><text id="navButton" class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg></div>
+        <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-1" style="cursor:default;max-width: 47px;transform: rotate(0);"><a href="/" class="stretched-link" style="opacity: 1;"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:#fff;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text id="navButton" class="cls-2" transform="translate(2 31.47)">T</text><text id="navButton" class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg></a></div>
         <div class="col col-lg-6 col-md-6 col-sm-3 col-xs-1" style="padding-left:8px;">
             <!-- Breadcrumbs -->
             <nav aria-label="breadcrumb" style="width:fit-content;">
                 <ol class="breadcrumb" style="background-color:white;">
-                    <li id="backButton" class="breadcrumb-item active" aria-current="page">Back</li>
+                    <li id="backButton" class="breadcrumb-item active" aria-current="page"><a id="backLink">Back</a></li>
                 </ol>
             </nav>
         </div>
         
         <div class="col col-lg-5 col-md-5 col-sm-7 col-xs-7 justify-content-end input-group" style="padding-top:6px;margin-right: 15px;">
-            <input type="text" placeholder="Search" style="width:inherit;">
+            <input type="text" placeholder="Search" style="width:inherit;" onkeypress="enterKeyPress(event);">
             <i class="icon ion-ios-search" style="cursor: pointer;"></i>
         </div>
     </div>
@@ -55,9 +55,7 @@
 <!-- CSS -->
 <style>
 .tile{min-width:250px;max-width:250px;min-height: 250px;max-height: 250px;border-radius: 6px;margin: 10px;}
-.breadcrumb-item{font-family: acumin-pro, sans-serif;
-font-weight: 300;
-font-style: normal;}
+.breadcrumb-item{font-family: acumin-pro, sans-serif;font-weight: 300;font-style: normal;text-overflow: ellipsis;white-space: nowrap;max-width: 25vw;overflow: hidden;height:40px;}
 .breadcrumb{line-height: 12px;margin-left: -4px;padding-left: 5px;}
 li:active{border: none;}
 a{color:rgb(250,40,87);}
@@ -191,7 +189,7 @@ let init = function(providerList, categoryList){
     }
     
     /**
-     * Ths dynamically sets the "breadcrumbs"
+     * Ths dynamically sets the "breadcrumbs" and the back buttons href
      * start it at index 1 because of the leading '/'
      */
     var path = window.location.pathname;
@@ -206,6 +204,8 @@ let init = function(providerList, categoryList){
         [i== (breadcrumbs.length-1) ? li.textContent = decodeURI(breadcrumbs[i]):li.innerHTML = "<a href='" + href + "'>" + decodeURI(breadcrumbs[i]) + "</a>"];
         var text = path.slice("/", i+1);
         document.querySelector(".breadcrumb").appendChild(li);
+        //set the back button href
+        if(i+2 == breadcrumbs.length) document.querySelector("#backLink").setAttribute("href", href);
         }
 }
 
@@ -265,7 +265,11 @@ function activateMenu(){
     }
 }
 
-
+function enterKeyPress(event){
+    if(event.keyCode == 13 || event.key == "Enter" || event == "SearchIconClick"){
+        window.location.href = "/search/" + document.querySelector("input").value;
+    }
+}
 
 function addContent(element){
     var name = [element["name"].length > 25 ? element["name"].slice(0,26) + "...": element["name"]];

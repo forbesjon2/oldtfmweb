@@ -59,7 +59,6 @@ function enterKeyPress(event){
 var query = decodeURI(window.location.toString().split("search/")[1]);
 document.querySelector("input").value = query;
 var req = new XMLHttpRequest();
-var qr = "";
 // document.querySelector("#main").textContent
 req.open("POST", "/search");
 req.send(JSON.stringify({"query": query }));
@@ -67,13 +66,11 @@ req.onload = function(){
 if (req.readyState === 4) {
     if (req.status === 200) {
         try{
-            qr =  req.responseText;
-        console.log(qr)
-        qr = JSON.parse(qr);
+        var qr = JSON.parse(req.responseText);
         for(var item in qr){
             var newdiv = document.createElement('div');
             newdiv.setAttribute("style","margin-left:8%;")
-            newdiv.innerHTML ='<div class="queryInfo row"><a class="qTitle" href="/transcription/' + qr[item].id + '">' + qr[item].title + '</a><div class="qDate d-none d-md-block">September 22, 2017</div></div><div class="queryinfo"><div class="qPodcast">' + qr[item].podcastname + '</div></div><div class="qDescription">' + qr[item].ts_headline + '</div>';
+            newdiv.innerHTML ='<div class="queryInfo row"><a class="qTitle" href="/explore/Itunes%20top%20100%20podcasts/' + encodeURI(qr[item].podcastname) + '/' + encodeURI(qr[item].title) + '">' + qr[item].title + '</a><div class="qDate d-none d-md-block">September 22, 2017</div></div><div class="queryinfo"><div class="qPodcast">' + qr[item].podcastname + '</div></div><div class="qDescription">' + qr[item].ts_headline + '</div>';
             // var divK = document.querySelector(".one");
             var divParent = document.querySelector("#mc");
             divParent.appendChild(newdiv);

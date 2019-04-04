@@ -1,39 +1,63 @@
 var validator = require("validator");
-const {indexRankAndHighlightQuery} = require("../queries/PreparedStatements");
+const {indexRankAndHighlightQuery, getTranscription} = require("../queries/PreparedStatements");
 
+
+let readJ = function (res){
+  return new Promise(function(resolve, reject){
+    readJson(res, (obj) => {
+        resolve(obj);
+      }, () => {
+        reject("Error, invalid Json");
+      });
+    })
+}
 
 
 class Routes{
-    constructor(webServer, pool){
-        this.webServer = webServer;
-        this.pool = pool;
-    }
-    attachPostRoutes(){
-        this.webServer.post("/search", (res, req) =>{
-            var localPool = this.pool;
-            // Get the Json and make sure its all letters or numbers
+  constructor(webServer, pool){
+      this.webServer = webServer;
+      this.pool = pool;
+  }
+  attachPostRoutes(){
 
-            let readJ = function (res){
-              return new Promise(function(resolve, reject){
-                readJson(res, (obj) => {
-                  if(validator.isAlphanumeric(obj.query.replace(/ /g, ""))){
-                    resolve(obj.query);
-                  }else{
-                    reject("Not alphanumeric");
-                  }
-                  }, () => {
-                    reject("Error, invalid Json");
-                  });
-                })
-              }
-              
-              readJ(res).then(function(response){
-                indexRankAndHighlightQuery(response, 10, localPool, res);
-              }).catch(function(err){
-                console.log("an error happened " + err);
-              })
+  /*************************************************************************
+   * This searches and highlights the query entered into search
+   *************************************************************************/
+    this.webServer.post("/search", (res, req) =>{
+      var localPool = this.pool;
+      res.onAborted(()=> {
+        res.aborted = true;
+      });
+
+      readJ(res).then(function(response){
+        indexRankAndHighlightQuery(response.query, 10, localPool, res);
+      }).catch(function(err){
+        console.log("an error happened " + err);
+      })
+    });
+
+
+
+      /*************************************************************************
+       * This is the updated route that is called in the transcription.html file
+       * c1: the general podcasts name
+       * c2: the podcast's (specific) show name
+       *************************************************************************/
+      this.webServer.post("/transcription", (res, req) =>{
+        var localPool = this.pool;
+        res.onAborted(()=> {
+          res.aborted = true;
         });
-        return this.webServer;
+        readJ(res).then(function(response){
+          return getTranscription(response.c1, response.c2, localPool);
+        }).then(function(message){
+          if(!res.aborted) res.end(message);
+        }).catch(function(err){
+          if(!res.aborted) res.end("err" + err);
+        });
+      });
+
+      return this.webServer;
     }
   }
 

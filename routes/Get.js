@@ -1,5 +1,7 @@
 var fs = require("fs");
-var validator = require("validator");
+const {getPodcastDetails} = require("../queries/PreparedStatements");
+
+
 
 class Routes{
     constructor(webServer, pool){
@@ -37,7 +39,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Home2.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Home.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -55,7 +57,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Explore2.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Explore.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -82,19 +84,6 @@ class Routes{
 
 
 //______________________________________SECONDARY ROUTES_____________________________________________________
-        /**********************************************************************
-         * This is the generic transcription route used by search. Its the nice
-         * view as opposed to /podcast/:id which returns just the transcription
-         * text
-         **********************************************************************/ 
-        this.webServer.get("/transcription/:id", (res, req) =>{
-            res.onAborted(()=>{
-                res.aborted = true;
-            });
-            if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Transcription.html", {encoding: 'utf-8'}));
-            }
-        })
 
         /**********************************************************************
          * The search page of transcript.fm. Any query is technically valid
@@ -142,6 +131,20 @@ class Routes{
                 res.end(fs.readFileSync("./mainPages/ExploreTertiary.html", {encoding: 'utf-8'}));
             }
         });
+        
+        /**********************************************************************
+         * This is the generic transcription route used by search. Its the nice
+         * view as opposed to /podcast/:id which returns just the transcription
+         * text
+         **********************************************************************/ 
+        this.webServer.get("/explore/:ds/:ds2/:ds3", (res, req) =>{
+            res.onAborted(()=>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Transcription.html", {encoding: 'utf-8'}));
+            }
+        })
         return this.webServer;
     }
 
@@ -211,28 +214,19 @@ class Routes{
 
 
 
-
-        // /**********************************************************************
-        //  * This is to be used as an API route from /transcription/:id route
-        //  **********************************************************************/
-        // this.webServer.get("/api/Itunes%20top%20100%20podcasts/:name", (res,req) => {
-        //     res.onAborted(() =>{
-        //         res.aborted = true;
-        //     });
-        //     var name = decodeURI(req.getParameter("id"));
-        //     if(!validator.isAlphanumeric(name) && !res.aborted){
-        //         res.end("error, not alphanumeric");
-        //     }else{
-        //         this.pool.query("SELECT t.transcription, t.description, t.podcastname, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.podcastname = " + name + " LIMIT 1;", (err, queryResult) =>{
-        //             if(!err && !res.aborted) {
-        //                 res.end(JSON.stringify(queryResult.rows));
-        //             }
-        //             else if(err && !res.aborted){
-        //                 res.end("err" + err);
-        //             }
-        //         });
-        //     }
-        // })
+        /**********************************************************************
+         * This is to be used as an API route from /transcription/:id route
+         **********************************************************************/
+        this.webServer.get("/api/Itunes%20top%20100%20podcasts/:name", (res,req) => {
+            res.onAborted(() =>{
+                res.aborted = true;
+            });
+            getPodcastDetails(decodeURI(req.getParameter("name")), this.pool).then(function(message){
+                if(!res.aborted) res.end(message);
+            }).catch(function(err){
+                if(!res.aborted) res.end(err);
+            });
+        })
 
 
         /**********************************************************************
@@ -242,19 +236,11 @@ class Routes{
             res.onAborted(() =>{
                 res.aborted = true;
             });
-            var name = decodeURI(req.getParameter("name"));
-            if(!validator.isAlphanumeric(name.replace(/ /g, "")) && !res.aborted){
-                res.end("error, not alphanumeric");
-            }else{
-                this.pool.query("SELECT p.description, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE lower(t.podcastname) = '" + name.toLowerCase() + "' GROUP BY p.description, p.imageuri, t.title, t.duration, t.date;", (err, queryResult) =>{
-                    if(!err && !res.aborted) {
-                        res.end(JSON.stringify(queryResult.rows));
-                    }
-                    else if(err && !res.aborted){
-                        res.end("err" + err);
-                    }
-                });
-            }
+            getPodcastDetails(decodeURI(req.getParameter("name")), this.pool).then(function(message){
+                if(!res.aborted) res.end(message);
+            }).catch(function(err){
+                if(!res.aborted) res.end(err);
+            });
         })
 
         return this.webServer;

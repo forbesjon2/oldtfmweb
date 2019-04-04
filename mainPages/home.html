@@ -11,67 +11,112 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Didact Gothic -->
+    <!-- Didact Gothic, merriweather, acumin -->
     <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/eif1eeg.css">
 
     <!-- Icon -->
     <link href="https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css" rel="stylesheet">
 </head>
 <body>
-    
-<div class="container-fluid">
-    <div id="navBar" class="mt-3 row">
-        <div id="navButton" class="col ml-3 menubarText text-center col-lg-2 col-md-3 col-sm-3 col-xs-1 colbg-primary leftMenu"><a href="/about">about</a></div>
-        <div id="navButton" class="col menubarText text-center col-lg-2 col-md-2 col-sm-2 col-xs-1"><a href="/explore">explore</a></div>
-        <div class="col col-lg-1 col-md-1 col-sm-1 text-center d-none text-right d-sm-block" style="cursor:default;"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:#fff;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text id="navButton" class="cls-2" transform="translate(2 31.47)">T</text><text id="navButton" class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg></div>
-        <div class="col menuCenterText noTextSelect text-left col-lg-2 d-none d-lg-block" style="opacity:1;">Transcript.fm</div>
-        <div id="navButton" class="col menubarText text-center col-lg-2 col-md-2 col-sm-2 col-xs-1"><a href="/contact">contact</a></div>
-        <div id="navButton" class="col rightMenu menubarText text-center col-lg-2 col-md-3 col-sm-3"><a href="/account">account</a></div>
+<div class="container-fluid" style="background-color: #E7FFF9;min-height: 437px;">
+    <!-- NavBar -->
+    <div id="navBar" class="pt-3 row">
+        <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-1" style="cursor:default;max-width: 47px;"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:none;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text id="navButton" class="cls-2" transform="translate(2 31.47)">T</text><text id="navButton" class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg></div>
+        <div class="col menuCenterText noTextSelect text-left col-lg-2 col-md-2 d-none d-md-block" style="opacity:1;">transcript.fm</div>
+        <div class="col col-lg-5 col-md-3 col-sm-7 col-xs-7" style="padding: 0px;"></div>
+        <div id="navButton" class="col menubarText text-center col-lg-1 col-md-2 col-sm-1 col-xs-1 colbg-primary leftMenu"><a href="/about">about</a></div>
+        <div id="navButton" class="col ml-3 menubarText text-center col-lg-1 col-md-2 col-sm-1 col-xs-1"><a href="/explore">explore</a></div>
+        <div id="navButton" class="col ml-3 rightMenu menubarText text-center col-lg-2 col-md-1 col-sm-1 col-xs-1"><a href="/account">account</a></div>        
     </div>
 
-    <div class="col-fluid">
-        <div class="align-items-end input-group markermal">
-            <input type="text" onclick="toggleSearch(this);" onblur="toggleEndSearch(this);" onkeyup="enterKeyPress(event);">
-                <i class="icon ion-ios-search" onclick="enterKeyPress('SearchIconClick');"style="cursor: pointer;"></i>
-        </div>
+    <!-- Center Headline & content -->
+    <div class="headlineSpan">
+        <span class="" style="height:fit-content;">Content aggregation <br>at scale<span>
     </div>
-
+    <div class="align-self-start" style="height: fit-content;margin-left: calc(20px + 2vw);">
+        <a class="btn mainButton" style="opacity:1;" href="/explore">Explore Content</a>
+    </div>
 </div>
 
 
 
+<div class="row" style="padding:0;padding-left: 15px;padding-right: 15px;;margin: 0px;margin-left: calc(20px + 2vw);margin-bottom: 150px;">
+    <div class="col-lg-4 col-md-6 col-sm-12" style="padding:0;">
+        <div class="row subHeadline">Simple</div>
+        <div class="row subDescription">Our easy to use platform provides <br>advanced solutions to <br> uploading, aggregating, and sharing data <br>at scale</div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12" style="padding:0;">
+        <div class="row subHeadline">Scalable</div>
+        <div class="row subDescription">We have very high quality data <br>providers with an extensive <br>amount of collections.</div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12" style="padding:0;">
+        <div class="row subHeadline">Powerful</div>
+        <div class="row subDescription">We prepare and index your <br>data for advanced search <br>techniques optimized for performance</div>
+    </div>
+</div>
+
+<div style="padding:0px;margin:0px;margin-left: calc(20px + 2vw);padding-left:15px;margin-bottom: 10px;">
+    <a class="bottomNav" href="/help">Help</a>
+    <a class="bottomNav" href="/contact">Contact</a>
+    <a class="bottomNav" href="/privacypolicy">Privacy Policy</a>
+    <a class="bottomNav" href="/sendfeedback">Send Feedback</a>
+</div>
 <!-- CSS -->
 <style>
 .noTextSelect{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none; cursor: default;}
-.markermal{min-height: 322px;max-height: 322px;justify-content: center;}
+.topicHeadline{min-height: 322px;max-height: 322px;justify-content: left;}
 a{color: black; opacity: 0.7;}
 a:hover{text-decoration: none; opacity: 1;border-bottom: 2px solid black;color: black;}
 .icon0{height: 2em;width: 2em;opacity: 1;}
-#navButton{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;}
+#navButton{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;padding-top: 7px;max-width: 110px;padding-right: 0px; padding-left: 0px;}
 i{margin-left: -30px;float: right;margin-bottom: 15px;transition: 1s;}
 .ion-ios-search:before{font-size: 22px;color: black;}
 input::-ms-clear{display: none;}
-
-input{
-    -webkit-appearance: none;
-    font-family: 'Merriweather', serif;
-    font-weight: 400;
-    font-size: 37px;
-    height: 44px;
-    display: block;
-    width: calc(212px + 26vw);
-    padding-left: 10px;
-    outline: none;
-    padding-top: 2px;
-    padding-right: 2px;
-    border-style: solid;
-    border-width: 0px 0px 1px 0px;
-    transition: 1s;
-    padding-right: 40px;
+.headlineSpan{
+    margin-left: calc(20px + 2vw);
+    font-size: calc(16px + 2vw);
+    margin-top: 80px;
+    opacity: 0.7;
+    font-family: acumin-pro, sans-serif;
+    font-weight: 300;
+    font-style: normal;
 }
-.selectedInput{margin-bottom: 200px;transition: 1s;}
-.selectedIcon{margin-bottom: 215px;transition: 1s;}
+
+.subHeadline{
+    font-family:acumin-pro-extra-condensed, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: calc(18px + 1vw);
+    padding: 0px;
+    margin: 0px;
+    margin-top: 30px;
+}
+.subDescription{
+    padding: 0px;
+    margin: 0px;
+    font-family: acumin-pro, sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+.mainButton{
+    font-family:acumin-pro-extra-condensed, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: calc(13px + 1vw);
+    padding-top: 0px;
+    margin-top: 30px;
+    padding-right: 76px;
+    padding-bottom: 2px;
+    background-color: rgb(35,31,32);
+    color: white;
+}
+.mainButton:hover{
+    background-color: black;
+    color: white;
+    transition: 0.5s;
+}
 
 .menubarText{
     font-family: 'Didact Gothic', sans-serif;
@@ -82,10 +127,19 @@ input{
 .menuCenterText{
     font-family: 'Merriweather', serif;
     font-weight: 700;
-    font-size: 1.3em;
+    font-size: 1.5em;
     opacity: 0.7;
 }
 .leftMenu{margin-left: 6;}
+.bottomNav{
+    font-family: 'Didact Gothic', sans-serif;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-right: 20px;
+}
+.bottomNav:hover{
+    border: none;
+}
 </style>
 
 <!-- Vue -->
