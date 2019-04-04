@@ -116,20 +116,20 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
 
 
 /*************************************************************************
- * Gets the list of shows given a podcast name. We use prepared statments
- * for this to avoid SQL injection attacks and allow for special characters
+ * Gets the general details of a specific podcast. used with "getShowList"
  * 
  *************************************************************************/
 function getPodcastDetails(podcastName, pool){
     return new Promise(function(resolve, reject){
-        try{
-            const preparedQuery = {
+        try{            
+            const podcastDetailsQuery = {
                 name:"podcast-details",
-                text: "SELECT p.description, t.title, p.imageuri, t.duration, t.date FROM transcriptions AS t JOIN podcasts AS p ON p.name = t.podcastname WHERE t.podcastname = $1 GROUP BY p.description, p.imageuri, t.title, t.duration, t.date;",
-                values: [podcastName]};
-            pool.query(preparedQuery, (err, qr) =>{
+                text:"SELECT description, imageuri from podcasts WHERE name = $1;",
+                values:[podcastName]};
+            
+            pool.query(podcastDetailsQuery, (err, qr) =>{
                 if(!err){
-                    resolve(JSON.stringify(qr.rows));
+                    resolve([podcastName, JSON.stringify(qr.rows)]);
                 }else{
                     reject("Error in getPodcastDetails query" + err);
                 }
@@ -139,6 +139,32 @@ function getPodcastDetails(podcastName, pool){
         }
     })
 }
+
+/*************************************************************************
+ * Gets the list of shows for a podcast. Used with "getPodcastDetails"
+ * so one of the arguments is the response from that promise.
+ * 
+ *************************************************************************/
+function getShowList(podcastName, pool, podcastDetails){
+    return new Promise(function(resolve, reject){
+        try{
+            const showListQuery = {
+                name:"podcast-shows",
+                text: "SELECT title, duration, date FROM transcriptions WHERE podcastname = $1;",
+                values: [podcastName]};
+            pool.query(showListQuery, (err, qr) =>{
+                if(!err){
+                    resolve([JSON.stringify(qr.rows), podcastDetails]);
+                }else{
+                    reject("Error in getShowList query " + err);
+                }
+            })
+        }catch(e){
+            reject("getShowList issue " + e);
+        }
+    })
+}
+
 
 /*************************************************************************
  * This is used in the POST route /transcription. It requires a podcastName
@@ -151,7 +177,7 @@ function getTranscription(podcastName, showName, pool){
         const preparedQuery = {
             name:"transcription-details",
             text:"SELECT t.transcription, t.title, t.description, p.imageuri, t.duration, t.date from transcriptions AS t JOIN podcasts AS p ON t.podcastname = p.name WHERE t.podcastname = $1 AND t.title LIKE $2 LIMIT 1;",
-            values: [podcastName, showName + "%"]};
+            values: [podcastName, showName.replace(/-/g, "%") + "%"]};
         pool.query(preparedQuery, (err, qr) =>{
             if(!err){
                 resolve(JSON.stringify(qr.rows));
@@ -162,4 +188,4 @@ function getTranscription(podcastName, showName, pool){
     });
 }
 
-module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription};
+module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription, getShowList};

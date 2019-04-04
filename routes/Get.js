@@ -1,5 +1,5 @@
 var fs = require("fs");
-const {getPodcastDetails} = require("../queries/PreparedStatements");
+const {getPodcastDetails, getShowList} = require("../queries/PreparedStatements");
 
 
 
@@ -218,26 +218,14 @@ class Routes{
          * This is to be used as an API route from /transcription/:id route
          **********************************************************************/
         this.webServer.get("/api/Itunes%20top%20100%20podcasts/:name", (res,req) => {
+            var localPool = this.pool;
             res.onAborted(() =>{
                 res.aborted = true;
             });
-            getPodcastDetails(decodeURI(req.getParameter("name")), this.pool).then(function(message){
-                if(!res.aborted) res.end(message);
-            }).catch(function(err){
-                if(!res.aborted) res.end(err);
-            });
-        })
-
-
-        /**********************************************************************
-         * This is to be used as an API route from /transcription/:id route
-         **********************************************************************/
-        this.webServer.get("/api/Itunes%20top%20100%20podcasts/:name", (res,req) => {
-            res.onAborted(() =>{
-                res.aborted = true;
-            });
-            getPodcastDetails(decodeURI(req.getParameter("name")), this.pool).then(function(message){
-                if(!res.aborted) res.end(message);
+            getPodcastDetails(decodeURI(req.getParameter("name")), localPool).then(function(message){
+                return getShowList(message[0], localPool, message[1]);
+            }).then(function(result){
+                if(!res.aborted) res.end(JSON.stringify([result[0], result[1]]));
             }).catch(function(err){
                 if(!res.aborted) res.end(err);
             });

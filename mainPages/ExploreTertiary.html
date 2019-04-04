@@ -189,14 +189,14 @@ req.send()});
  * 
  * This begins by parsing the category string 
  *************************************************************************/
-let init = function(podcasts){
+let init = function(podcasts, description){
     this.podcasts = podcasts;
     this.categoryList = categoryList;
     var path = window.location.pathname;
     for(var item in podcasts){
         var colDiv = document.createElement("div");
         colDiv.setAttribute("class", "row");
-        var linkBefore = '<a href="'+ path + '/' +  podcasts[item]["title"] + '"  class="showLink stretched-link">';
+        var linkBefore = '<a href="'+ path + '/' +  podcasts[item]["title"].replace(/\//g,"-") + '"  class="showLink stretched-link">';
         colDiv.innerHTML = '<div id="cContent" class="col sl">' + linkBefore + podcasts[item]["title"] + '</a></div>'
             + '<div id="cContent" class="col">' + linkBefore + podcasts[item]["date"].split("T")[0] + '</a></div>'
             + '<div id="cContent" class="col">' + linkBefore + Math.floor(podcasts[item]["duration"] / 60) + ' minutes</a></div>';
@@ -208,11 +208,9 @@ let init = function(podcasts){
      * Ths dynamically sets the "breadcrumbs" and then the back button's href
      * start it at index 1 because of the leading '/'
      */
-    
     var breadcrumbs = path.split("/");
     for(var i = 1; i < breadcrumbs.length; ++i){
         var li = document.createElement("li");
-        console.log(i)
         li.setAttribute("class", [i == (breadcrumbs.length -1) ? "breadcrumb-item active": "breadcrumb-item"]);
         [i== (breadcrumbs.length-1) ? li.setAttribute("aria-current", "page"):null];
         var href = "";
@@ -223,20 +221,19 @@ let init = function(podcasts){
         //set the back button href
         if(i+2 == breadcrumbs.length) document.querySelector("#backLink").setAttribute("href", href);
     }
-
     //set the title
     document.querySelector("#title").textContent = decodeURI(breadcrumbs[breadcrumbs.length - 1]);
-    document.querySelector("#descContent").textContent = podcasts[0]["description"];
-    document.querySelector("#sdescContent").textContent = podcasts[0]["description"];
-    document.querySelector(".mainImg").setAttribute("src", podcasts[0]["imageuri"]);
+    document.querySelector("#descContent").textContent = description[0]["description"];
+    document.querySelector("#sdescContent").textContent = description[0]["description"];
+    document.querySelector(".mainImg").setAttribute("src", description[0]["imageuri"]);
 }
 
 
 
 
-//Promises logic
+//Promises logic. Index 0 is the whole list, index 1 is just the description and image uri
 getPodcasts(podcasts).then(function(resArray){
-    init(resArray);
+    init(JSON.parse(resArray[0]), JSON.parse(resArray[1]));
 }).catch(function(err){
     console.log("An error happened when checking the API" + err)
 });
