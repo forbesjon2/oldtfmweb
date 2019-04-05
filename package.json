@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
     "pg": "^7.8.2",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.8.0",

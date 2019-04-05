@@ -17,6 +17,8 @@ var app = uWS.App();
 
 app = new Get.Routes(app, pool).attachGetRoutes();
 app = new Get.Routes(app, pool).attachGetAPIRoutes();
+app = new Get.Routes(app, pool).attachAccountAPIRoutes();
+app = new Post.Routes(app, pool).attachPostAccountRoutes();
 app = new Post.Routes(app, pool).attachPostRoutes();
 
 

@@ -4,6 +4,8 @@
  * to protect forom SQL injection in case malicious sequences are attempted 
  */
 const validator = require('validator');
+const bcrypt = require('bcrypt');
+
 /*************************************************************************
  * This returns an array (as string) of index values that match the query 
  * provided and returns false if something happened
@@ -188,4 +190,70 @@ function getTranscription(podcastName, showName, pool){
     });
 }
 
-module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription, getShowList};
+
+
+
+/*************************************************************************
+ * This checks if a username exists. Its used in post.js when the user
+ * tries to create a new account. 
+ * 
+ * index 0: Returns true if an account with that username exists or
+ * false if the username is unique
+ * index 1: Returns username
+ * index 2: Returns password
+ * 
+ * 1st step of account creation
+ *************************************************************************/
+function checkIfUsernameExists(username, password, pool){
+    return new Promise(function(resolve, reject){
+        const preparedQuery = {
+            name:"check-account-valid",
+            text: "SELECT username FROM users WHERE username = $1",
+            values:[username]};
+        pool.query(preparedQuery, (err, qr) =>{
+            if(!err){
+                resolve([[qr.rows.length == 1 ? true : false], username, password]);
+            }else{
+                reject(err);
+            }
+        })
+    })
+}
+
+
+/*************************************************************************
+ * This is run after the "checkIfUsernameExists" function returns a status
+ * representing that the username isnt taken. It then inserts the username
+ * and hash as new values into the database
+ * 
+ * 2nd step of account creation 
+ *************************************************************************/
+function insertUsernameAndHash(username, password, pool){
+    
+    let insertData = function(username, hash){
+        return new Promise(function(resolve, reject){
+        const preparedQuery = {
+            name: "insert-username-hash",
+            text: "INSERT INTO users(username, hash) VALUES($1, $2);",
+            values: [username, hash]};
+        pool.query(preparedQuery, (err, qr) =>{
+            if(!err){
+                resolve(JSON.stringify(qr.rows));
+            }else{
+                reject(err);
+            }
+        })
+    })}
+
+    bcrypt.hash(password, 11).then(function(hash){
+        return insertData(username,hash);
+    }).then(function(message){
+        console.log(message);
+    }).catch(function(err){
+        console.log("an error happened in insertUsernameAndHash with message " + err);
+    })
+
+}
+
+
+module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription, getShowList, checkIfUsernameExists, insertUsernameAndHash};

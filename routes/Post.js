@@ -1,6 +1,6 @@
 var validator = require("validator");
-const {indexRankAndHighlightQuery, getTranscription} = require("../queries/PreparedStatements");
-
+const {indexRankAndHighlightQuery, getTranscription, checkIfUsernameExists, insertUsernameAndHash} = require("../queries/PreparedStatements");
+const bcrypt = require('bcrypt');
 
 let readJ = function (res){
   return new Promise(function(resolve, reject){
@@ -42,6 +42,9 @@ class Routes{
        * This is the updated route that is called in the transcription.html file
        * c1: the general podcasts name
        * c2: the podcast's (specific) show name
+       * 
+       * Heres the JSON format
+       * {"C1":<string>, "c2":<string>}
        *************************************************************************/
       this.webServer.post("/transcription", (res, req) =>{
         var localPool = this.pool;
@@ -56,9 +59,51 @@ class Routes{
           if(!res.aborted) res.end("err" + err);
         });
       });
-
       return this.webServer;
     }
+
+
+  /*************************************************************************
+   * Everything related to accounts and authentication is in here.
+   * 
+   * heres the JSON format
+   * {"username":<string>, "password":<string>}
+   *************************************************************************/
+    attachPostAccountRoutes(){
+      this.webServer.post("/account/create", (res, req) =>{
+        var localPool = this.pool;
+        res.onAborted(()=> {
+          res.aborted = true;
+        });
+        readJ(res).then(function(jsonContent){
+          console.log(jsonContent)
+          return checkIfUsernameExists(jsonContent.username, jsonContent.password, localPool);
+        }).then(function(response){
+          console.log("RRS" + response);
+          if(response[0] == false && !res.aborted){
+            res.end("username exists fool");
+          }else{
+            return insertUsernameAndHash(response[1], response[2], localPool);
+          }
+        // }).then(function(hash){
+        //   console.log();
+        // }).then(function(response){
+        //   console.log(response);
+        }).catch(function(err){
+          console.log("an error phapndnen " + err);
+          res.end(err);
+        })
+      })
+
+      this.webServer.post("/account/login", (res,req) =>{
+        var localPool = this.pool;
+        res.onAborted(()=> {
+          res.aborted = true;
+        });
+      })
+      return this.webServer;
+    }
+    
   }
 
 

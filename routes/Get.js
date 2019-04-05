@@ -233,6 +233,23 @@ class Routes{
 
         return this.webServer;
     }
+
+
+
+
+
+
+    /*********************************************************************
+     * This is where all of the Account related API routes are located
+     **********************************************************************/
+    attachAccountAPIRoutes(){
+
+        return this.webServer;
+    }
+
+
+
+
 }
 
 
