@@ -1,5 +1,5 @@
 var validator = require("validator");
-const {indexRankAndHighlightQuery, getTranscription, checkIfUsernameExists, insertUsernameAndHash} = require("../queries/PreparedStatements");
+const {indexRankAndHighlightQuery, getTranscription, checkLoginDetails, checkIfUsernameExists, insertUsernameAndHash} = require("../queries/PreparedStatements");
 const bcrypt = require('bcrypt');
 
 let readJ = function (res){
@@ -66,40 +66,59 @@ class Routes{
   /*************************************************************************
    * Everything related to accounts and authentication is in here.
    * 
-   * heres the JSON format
-   * {"username":<string>, "password":<string>}
+   * /account/create -> deals with creating an account (checking if a username
+   *                    is not taken and creating DB entry if it isnt)
+   * /account/login -> deals with logging in
    *************************************************************************/
     attachPostAccountRoutes(){
+
+
+
+
+      /*************************************************************************
+      * heres the JSON format that is to be sent to this endpoint
+      * {"username":<string>, "password":<string>}
+      * 
+      * heres what will be returned if theres a success
+      * {"status":<boolean>}
+      *************************************************************************/
       this.webServer.post("/account/create", (res, req) =>{
         var localPool = this.pool;
         res.onAborted(()=> {
           res.aborted = true;
         });
         readJ(res).then(function(jsonContent){
-          console.log(jsonContent)
           return checkIfUsernameExists(jsonContent.username, jsonContent.password, localPool);
         }).then(function(response){
-          console.log("RRS" + response);
-          if(response[0] == false && !res.aborted){
-            res.end("username exists fool");
+          if(response[0] == false){
+            res.end("{\"status\":false}");
           }else{
-            return insertUsernameAndHash(response[1], response[2], localPool);
+            return insertUsernameAndHash(response[1], response[2], localPool, res);
           }
-        // }).then(function(hash){
-        //   console.log();
-        // }).then(function(response){
-        //   console.log(response);
         }).catch(function(err){
           console.log("an error phapndnen " + err);
           res.end(err);
         })
       })
 
+
+      /*************************************************************************
+      * heres the JSON format that is to be sent to this endpoint
+      * {"username":<string>, "password":<string>}
+      * 
+      * heres what will be returned
+      * {"status":<boolean>}
+      *************************************************************************/
       this.webServer.post("/account/login", (res,req) =>{
         var localPool = this.pool;
         res.onAborted(()=> {
           res.aborted = true;
         });
+        readJ(res).then(function(jsonContent){
+          checkLoginDetails(jsonContent.username, jsonContent.password, localPool, res);
+        }).catch(function(err){
+          if(!res.aborted) res.end("{\"status\":\"authentication failure\"}");
+        })
       })
       return this.webServer;
     }

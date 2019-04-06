@@ -1,17 +1,20 @@
 /**
  * Because were not using very complex queries. Using prepared statments for
  * optimization purposes isn't really the point. This file stores prepared statements
- * to protect forom SQL injection in case malicious sequences are attempted 
+ * to protect forom SQL injection in case malicious sequences are attempted
  */
 const validator = require('validator');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');       //check password (authentication)
+const crypto = require('crypto');       //random string, used with JWT
+const JWT = require('jsonwebtoken');    //session
+
 
 /*************************************************************************
- * This returns an array (as string) of index values that match the query 
+ * This returns an array (as string) of index values that match the query
  * provided and returns false if something happened
- * 
+ *
  * @param {String} query The words you want to index
- * @param {Int} numResults The max number of results that you want to be listed 
+ * @param {Int} numResults The max number of results that you want to be listed
  * @param {pg} pool The instance of postgres pool
  **************************************************************************/
 function indexRankQuery(query, numResults, pool){
@@ -35,13 +38,13 @@ function indexRankQuery(query, numResults, pool){
             })
         })
     }
-    
+
     runQ(preparedQuery, resultStr).then(function(resultStr){
         return resultStr;
     }).catch(function(error){
         console.log("fuck an error panement " + error);
     })
-    
+
 }
 
 
@@ -51,8 +54,8 @@ function indexRankQuery(query, numResults, pool){
 /*************************************************************************
  * Takes the array of id's from indexRankQuery  as well as the original
  * query and highlights the results. Returns false if something bad happened
- * 
- * @param {String} idArray array of id's 
+ *
+ * @param {String} idArray array of id's
  * @param {String} query the query text
  * @param {pg} pool postgres client pool
  * @param {res} res response
@@ -96,11 +99,11 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
             }catch(e){
                 reject("RunH pool query issue" + e);
             }
-            
+
         })}
     var resultStr = "[";
 
-    
+
     runQ(preparedRankQuery, resultStr).then(function(idArray){
         const preparedHighlightQuery = {
             name: "highlight-query",
@@ -119,16 +122,16 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
 
 /*************************************************************************
  * Gets the general details of a specific podcast. used with "getShowList"
- * 
+ *
  *************************************************************************/
 function getPodcastDetails(podcastName, pool){
     return new Promise(function(resolve, reject){
-        try{            
+        try{
             const podcastDetailsQuery = {
                 name:"podcast-details",
                 text:"SELECT description, imageuri from podcasts WHERE name = $1;",
                 values:[podcastName]};
-            
+
             pool.query(podcastDetailsQuery, (err, qr) =>{
                 if(!err){
                     resolve([podcastName, JSON.stringify(qr.rows)]);
@@ -145,7 +148,7 @@ function getPodcastDetails(podcastName, pool){
 /*************************************************************************
  * Gets the list of shows for a podcast. Used with "getPodcastDetails"
  * so one of the arguments is the response from that promise.
- * 
+ *
  *************************************************************************/
 function getShowList(podcastName, pool, podcastDetails){
     return new Promise(function(resolve, reject){
@@ -170,7 +173,7 @@ function getShowList(podcastName, pool, podcastDetails){
 
 /*************************************************************************
  * This is used in the POST route /transcription. It requires a podcastName
- * and a showName and uses prepared statements to run the query safely. 
+ * and a showName and uses prepared statements to run the query safely.
  * Returns transcription, title, description, imageuri, and duration in
  * JSON format
  *************************************************************************/
@@ -195,13 +198,13 @@ function getTranscription(podcastName, showName, pool){
 
 /*************************************************************************
  * This checks if a username exists. Its used in post.js when the user
- * tries to create a new account. 
- * 
+ * tries to create a new account.
+ *
  * index 0: Returns true if an account with that username exists or
  * false if the username is unique
  * index 1: Returns username
  * index 2: Returns password
- * 
+ *
  * 1st step of account creation
  *************************************************************************/
 function checkIfUsernameExists(username, password, pool){
@@ -212,7 +215,7 @@ function checkIfUsernameExists(username, password, pool){
             values:[username]};
         pool.query(preparedQuery, (err, qr) =>{
             if(!err){
-                resolve([[qr.rows.length == 1 ? true : false], username, password]);
+                resolve([qr.rows.length == 1 ? false : true, username, password]);
             }else{
                 reject(err);
             }
@@ -225,11 +228,10 @@ function checkIfUsernameExists(username, password, pool){
  * This is run after the "checkIfUsernameExists" function returns a status
  * representing that the username isnt taken. It then inserts the username
  * and hash as new values into the database
- * 
- * 2nd step of account creation 
+ *
+ * 2nd step of account creation
  *************************************************************************/
-function insertUsernameAndHash(username, password, pool){
-    
+function insertUsernameAndHash(username, password, pool, res){
     let insertData = function(username, hash){
         return new Promise(function(resolve, reject){
         const preparedQuery = {
@@ -238,7 +240,7 @@ function insertUsernameAndHash(username, password, pool){
             values: [username, hash]};
         pool.query(preparedQuery, (err, qr) =>{
             if(!err){
-                resolve(JSON.stringify(qr.rows));
+                resolve("{\"status\":true}");
             }else{
                 reject(err);
             }
@@ -248,12 +250,58 @@ function insertUsernameAndHash(username, password, pool){
     bcrypt.hash(password, 11).then(function(hash){
         return insertData(username,hash);
     }).then(function(message){
-        console.log(message);
+        if(!res.aborted) res.end(message);
     }).catch(function(err){
         console.log("an error happened in insertUsernameAndHash with message " + err);
     })
-
 }
 
 
-module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription, getShowList, checkIfUsernameExists, insertUsernameAndHash};
+
+/*************************************************************************
+ * Retrieves the username and hash from the database given the username
+ * and checks to see if the password matches the decoded hash
+ *************************************************************************/
+function checkLoginDetails(username, password, pool, res){
+    let retrieveData = function(username, pool){
+        return new Promise(function(resolve, reject){
+        const preparedQuery ={
+            name:"get-login-details",
+            text: "SELECT username, hash FROM users WHERE username = $1;",
+            values:[username]};
+            pool.query(preparedQuery, (err, qr) =>{
+                if(!err){
+                    resolve(JSON.stringify(qr.rows));
+                }else{
+                    reject(err);
+                }
+            })
+    })}
+
+    let createSession = function(){
+        return new Promise(function(resolve, reject){
+            var id = crypto.randomBytes(20).toString('hex');
+            crypto.randomBytes(26, (err, buf) => {
+                if (!err) resolve(buf.toString);
+                reject(err);
+          });
+        })
+    }
+    let storeSession = function(){
+        return new Promise(resolve, reject){
+            
+        }
+    }
+
+    retrieveData(username, pool).then(function(resp){
+        if(JSON.parse(resp).length == 0 && !res.aborted)return Promise.reject();
+        return bcrypt.compare(password, JSON.parse(resp)[0].hash);
+    }).then(function(loginSuccess){
+        if(!res.aborted) res.end("{\"status\":" + loginSuccess + "}")
+    }).catch(function(){
+        if(!res.aborted) res.end("{\"status\":false}");
+    });
+}
+
+
+module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription, getShowList, checkIfUsernameExists, insertUsernameAndHash, checkLoginDetails};
