@@ -51,8 +51,10 @@ a:hover{border:none; text-emphasis: none; text-decoration: none;}
 //runs when you click enter in the top input field.
 function enterKeyPress(event){
     if(event.keyCode == 13 || event.key == "Enter"){
-        console.log("eionf")
-        window.location.href = "/search/" + document.querySelector("input").value + "/1";}
+        if(uriSplit.length == 7) {
+            window.location.href = "/search/" + decodeURI(uriSplit[4]) + "/" + document.querySelector("input").value + "/1";
+        }else{window.location.href = "/search/" + document.querySelector("input").value + "/1";}
+    }
 }
 // Under 700px make date shorter in format 
 
