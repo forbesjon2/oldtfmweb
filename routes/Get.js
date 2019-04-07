@@ -1,5 +1,5 @@
 var fs = require("fs");
-const {getPodcastDetails, getShowList} = require("../queries/PreparedStatements");
+const {getPodcastDetails, getShowList, checkIfLoggedIn} = require("../queries/PreparedStatements");
 
 
 
@@ -34,10 +34,10 @@ class Routes{
     attachGetRoutes(){
 //______________________________________PRIMARY ROUTES_____________________________________________________
         this.webServer.get("/", (res,req) =>{
-            // setHeaders(res);
             res.onAborted(() =>{
                 res.aborted = true;
             });
+            console.log("SS",req.getHeader("cookie"));
             if(!res.aborted){
                 res.end(fs.readFileSync("./mainPages/Home.html", {encoding: 'utf-8'}));
             }
@@ -89,8 +89,10 @@ class Routes{
          * The search page of transcript.fm. Any query is technically valid
          * however its sanitized later on in the API. Note: the query is 
          * sent via a POST request on page load
+         * 
+         * This is for generic search (/query/page)
          **********************************************************************/
-        this.webServer.get("/search/:query", (res, req) =>{
+        this.webServer.get("/search/:ds/:ds1", (res, req) =>{
             res.onAborted(()=>{
                 res.aborted = true;
             });
@@ -143,6 +145,23 @@ class Routes{
             });
             if(!res.aborted){
                 res.end(fs.readFileSync("./mainPages/Transcription.html", {encoding: 'utf-8'}));
+            }
+        })
+
+        /**********************************************************************
+         * The search page of transcript.fm. Any query is technically valid
+         * however its sanitized later on in the API. Note: the query is 
+         * sent via a POST request on page load, the data is just stored in
+         * the URL
+         * 
+         * This is for more specific search (/podcast/query/page)
+         **********************************************************************/
+        this.webServer.get("/search/:ds/:ds1/:ds2", (res, req) =>{
+            res.onAborted(()=>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Search.html", {encoding: 'utf-8'}));
             }
         })
         return this.webServer;

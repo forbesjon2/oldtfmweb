@@ -31,7 +31,7 @@
         </div>
         
         <div class="col col-lg-5 col-md-5 col-sm-7 col-xs-7 justify-content-end input-group" style="padding-top:6px;margin-right: 15px;">
-            <input type="text" placeholder="Search" style="width:inherit;">
+            <input type="text" placeholder="Search" style="width:inherit;" onkeypress="enterKeyPress(event)">
             <i class="icon ion-ios-search" style="cursor: pointer;"></i>
         </div>
     </div>
@@ -193,6 +193,8 @@ let init = function(podcasts, description){
     this.podcasts = podcasts;
     this.categoryList = categoryList;
     var path = window.location.pathname;
+    var title = window.location.href.split("/");
+    document.querySelector("input").setAttribute("placeholder", "Search " + decodeURI(title.slice(title.length-1, title.length)[0]));
     for(var item in podcasts){
         var colDiv = document.createElement("div");
         colDiv.setAttribute("class", "row");
@@ -241,7 +243,7 @@ getPodcasts(podcasts).then(function(resArray){
 
 function enterKeyPress(event){
     if(event.keyCode == 13 || event.key == "Enter" || event == "SearchIconClick"){
-        window.location.href = "/search/" + document.querySelector("input").value;
+        window.location.href = "/search/" + document.querySelector("#title").textContent + "/" + document.querySelector("input").value + "/1";
     }
 }
 

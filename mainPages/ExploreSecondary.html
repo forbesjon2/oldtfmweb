@@ -176,6 +176,8 @@ req.send()});
 let init = function(providerList, categoryList){
     this.providerList = providerList;
     this.categoryList = categoryList;
+    var title = window.location.href.split("/");
+    document.querySelector("input").setAttribute("placeholder", "Search " + decodeURI(title.slice(title.length-1, title.length)[0]));
     for(var item in providerList){
         addContent(providerList[item]);
     }
@@ -196,7 +198,6 @@ let init = function(providerList, categoryList){
     var breadcrumbs = path.split("/");
     for(var i = 1; i < breadcrumbs.length; ++i){
         var li = document.createElement("li");
-        console.log(i)
         li.setAttribute("class", [i == (breadcrumbs.length -1) ? "breadcrumb-item active": "breadcrumb-item"]);
         [i== (breadcrumbs.length-1) ? li.setAttribute("aria-current", "page"):null];
         var href = "";
@@ -267,7 +268,7 @@ function activateMenu(){
 
 function enterKeyPress(event){
     if(event.keyCode == 13 || event.key == "Enter" || event == "SearchIconClick"){
-        window.location.href = "/search/" + document.querySelector("input").value;
+        window.location.href = "/search/" + document.querySelector("input").value + "/1";
     }
 }
 

@@ -9,44 +9,6 @@ const crypto = require('crypto');       //random string, used with JWT
 const JWT = require('jsonwebtoken');    //session
 
 
-/*************************************************************************
- * This returns an array (as string) of index values that match the query
- * provided and returns false if something happened
- *
- * @param {String} query The words you want to index
- * @param {Int} numResults The max number of results that you want to be listed
- * @param {pg} pool The instance of postgres pool
- **************************************************************************/
-function indexRankQuery(query, numResults, pool){
-    const preparedQuery =  {
-        name: "index-query",
-        text: "SELECT id FROM transcriptions WHERE tsv @@ plainto_tsquery($1) ORDER BY ts_rank_cd(tsv, plainto_tsquery($1)) DESC LIMIT $2;",
-        values: [query, numResults]
-    };
-
-    var resultStr = "[";
-    let runQ = function(preparedQuery, resultStr){
-        return new Promise(function(resolve, reject){
-            pool.query(preparedQuery, (err, qr) =>{
-                if(!err){
-                    for(var i = 0; i < qr.rows.length; ++i) resultStr += "\"" + qr.rows[i].id + "\", ";
-                    resultStr = resultStr.slice(0, resultStr.length - 2) + "]";
-                    resolve(resultStr);
-                }else{
-                    reject("error in IRQ" + err);
-                }
-            })
-        })
-    }
-
-    runQ(preparedQuery, resultStr).then(function(resultStr){
-        return resultStr;
-    }).catch(function(error){
-        console.log("fuck an error panement " + error);
-    })
-
-}
-
 
 
 
@@ -60,20 +22,29 @@ function indexRankQuery(query, numResults, pool){
  * @param {pg} pool postgres client pool
  * @param {res} res response
  **************************************************************************/
-function indexRankAndHighlightQuery(query, numResults, pool, res){
+function indexRankAndHighlightQuery(query, page, subq, pool, res){
+    const preparedQuerySubq =  {
+        name: "index-query-subq",
+        text: "SELECT id FROM transcriptions WHERE LOWER(podcastname) = LOWER($2) AND tsv @@ plainto_tsquery($1) ORDER BY ts_rank_cd(tsv, plainto_tsquery($1)) DESC;",
+        values: [query, subq]};
+    
     const preparedRankQuery =  {
         name: "rank-query",
-        text: "SELECT id FROM transcriptions WHERE tsv @@ plainto_tsquery($1) ORDER BY ts_rank_cd(tsv, plainto_tsquery($1)) DESC LIMIT $2;",
-        values: [query, numResults]
-    };
-
+        text: "SELECT id FROM transcriptions WHERE tsv @@ plainto_tsquery($1) ORDER BY ts_rank_cd(tsv, plainto_tsquery($1)) DESC;",
+        values: [query]};
 
     let runQ = function(preparedQuery, resultStr){
         return new Promise(function(resolve, reject){
             try{
                 pool.query(preparedQuery, (err, qr) =>{
                     if(!err){
-                        for(var i = 0; i < qr.rows.length; ++i) resultStr += "\"" + qr.rows[i].id + "\", ";
+                        for(var i = (page - 1) *10; i < ((page - 1) * 10) + 10; ++i) {
+                            try{
+                                resultStr += "\"" + qr.rows[i].id + "\", ";
+                            }catch(e){
+                                break;
+                            }
+                        }
                         resultStr = resultStr.slice(0, resultStr.length - 2) + "]";
                         resolve(resultStr);
                     }else{
@@ -101,22 +72,25 @@ function indexRankAndHighlightQuery(query, numResults, pool, res){
             }
 
         })}
-    var resultStr = "[";
 
-
-    runQ(preparedRankQuery, resultStr).then(function(idArray){
+    runQ(subq.length > 0 ? preparedQuerySubq : preparedRankQuery, "[").then(function(idArray){
         const preparedHighlightQuery = {
             name: "highlight-query",
-            text: "WITH arr(ids) AS (VALUES($1)) SELECT ts_headline('english',(coalesce(transcription, '') || ' ... '|| coalesce(description)), plainto_tsquery($2), 'MinWords=40, MaxWords=90'), id, title, podcastname, date FROM transcriptions WHERE id IN (SELECT elem::int FROM arr, json_array_elements_text(ids::json) elem);",
+            text: "WITH arr(ids) AS (VALUES($1)) SELECT ts_headline('english',(coalesce(transcription, '') || ' ... '|| coalesce(description)), plainto_tsquery($2), 'MinWords=40, MaxWords=90'), id, title, podcastname, date FROM transcriptions WHERE id IN (SELECT elem::int FROM arr, json_array_elements_text(ids::json) elem) ORDER BY ts_rank_cd(tsv, plainto_tsquery($2)) DESC;",
             values: [idArray, query]
         };
-        return runH(preparedHighlightQuery);
+        if(idArray.length > 4){
+            return runH(preparedHighlightQuery);
+        }else{
+            return Promise.reject("none")
+        }
     }).then(function(highlights){
         res.end(highlights);
     }).catch(function(error){
-        res.end("An error happened with message " + error);
+        if(!res.aborted) res.end(error == "none" ? "[]" : "error in indexAndHighlightQuery with message " +error);
     })
 }
+
 
 
 
@@ -262,7 +236,7 @@ function insertUsernameAndHash(username, password, pool, res){
  * Retrieves the username and hash from the database given the username
  * and checks to see if the password matches the decoded hash
  *************************************************************************/
-function checkLoginDetails(username, password, pool, res){
+function checkLoginDetails(username, password, stayLoggedIn, pool, res){
     let retrieveData = function(username, pool){
         return new Promise(function(resolve, reject){
         const preparedQuery ={
@@ -280,28 +254,65 @@ function checkLoginDetails(username, password, pool, res){
 
     let createSession = function(){
         return new Promise(function(resolve, reject){
-            var id = crypto.randomBytes(20).toString('hex');
             crypto.randomBytes(26, (err, buf) => {
-                if (!err) resolve(buf.toString);
-                reject(err);
+                if (!err){
+                    resolve(buf.toString("hex"));
+                }else{
+                    reject(err);
+                }
           });
-        })
-    }
-    let storeSession = function(){
-        return new Promise(resolve, reject){
-            
-        }
-    }
+    })}
+
+    let storeSession = function(SID){
+        return new Promise(function(resolve, reject){
+            const preparedSessionQuery = {
+                name:"store-session",
+                text: "UPDATE users SET sid = $1 WHERE username = $2;",
+                values:[SID, username]};
+                pool.query(preparedSessionQuery, (err, qr)=>{
+                    if(!err){
+                        resolve(SID)
+                    }else{
+                        reject(err);
+                    }
+                });
+        });}
 
     retrieveData(username, pool).then(function(resp){
-        if(JSON.parse(resp).length == 0 && !res.aborted)return Promise.reject();
+        if(JSON.parse(resp).length == 0 && !res.aborted) return Promise.reject("retrieveData error");
         return bcrypt.compare(password, JSON.parse(resp)[0].hash);
     }).then(function(loginSuccess){
-        if(!res.aborted) res.end("{\"status\":" + loginSuccess + "}")
-    }).catch(function(){
+        if(!loginSuccess) return Promise.reject("loginSuccess error");
+        return createSession();
+    }).then(function(SID){
+        return storeSession(SID);
+    }).then(function(resp){
+        var age = [stayLoggedIn == true? 2592000 : 86400];
+        var cc = "SID=" + resp +"; Max-Age=" + age + "; HttpOnly;Path=/;";
+        res.writeHeader("Set-Cookie", cc);
+        res.end("{\"status\":true}");
+    }).catch(function(err){
         if(!res.aborted) res.end("{\"status\":false}");
     });
 }
 
 
-module.exports = {indexRankQuery, indexRankAndHighlightQuery, getPodcastDetails, getTranscription, getShowList, checkIfUsernameExists, insertUsernameAndHash, checkLoginDetails};
+function checkIfLoggedIn(sid, pool){
+    const preparedQuery = {
+        name:"check-session",
+        text:"SELECT username FROM users WHERE sid = $1;",
+        values:[sid]};
+    return new Promise(function(resolve, reject){
+        pool.query(preparedQuery, (err, qr) =>{
+            if(!err){
+                resolve(JSON.stringify(qr.rows));
+            }else{
+                reject("checkIfLoggedIn query error " + err);
+            }
+        })
+    });
+}
+
+
+module.exports = {indexRankAndHighlightQuery, getPodcastDetails, getTranscription, 
+    getShowList, checkIfUsernameExists, insertUsernameAndHash, checkLoginDetails, checkIfLoggedIn};

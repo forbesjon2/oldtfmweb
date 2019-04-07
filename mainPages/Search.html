@@ -26,12 +26,13 @@
     </div>
     
     <!-- Search Stats -->
-    <div class="resultInfo row mb-1">About 32 results (3.9 seconds)</div>
-
+    <!-- <div class="resultInfo row mb-1">About 32 results (3.9 seconds)</div> -->
 </div>
+<div class="nextPage"><a id="next" href="">next page</a></div>
 
 <!-- CSS -->
 <style>
+.nextPage{margin-top: 20px;width: 100%;padding-right: 30px;text-align: right;margin-bottom: 20px;font-family: 'Merriweather', serif;font-weight: 400;font-size: 13px;}
 .queryText{font-family: 'Merriweather', serif;font-weight: 400;margin-top: 5px;font-size:90%;margin-left: 14px;}
 svg{height: 2em;width: 2em;opacity: 1;margin-left: 8.5vw;}
 .resultInfo{font-family: 'Didact Gothic', sans-serif; font-size: 12px;margin-bottom: 40px;margin-left: 8%;max-width: 280px;}
@@ -43,25 +44,42 @@ svg{height: 2em;width: 2em;opacity: 1;margin-left: 8.5vw;}
 .one{max-width: 700px;}
 .qPodcast{font-family: 'Didact Gothic', sans-serif; font-size: 12px;color: #006837;}
 input{-webkit-appearance: none;font-family: 'Merriweather', serif;display: block;outline: none;border-style: none;}
+a:hover{border:none; text-emphasis: none; text-decoration: none;}
 </style>
 <!-- Script -->
 <script>
 //runs when you click enter in the top input field.
 function enterKeyPress(event){
     if(event.keyCode == 13 || event.key == "Enter"){
-        window.location.href = "/search/" + document.querySelector("input").value;
-    }
+        console.log("eionf")
+        window.location.href = "/search/" + document.querySelector("input").value + "/1";}
 }
 // Under 700px make date shorter in format 
 
 
 // Set up and send the request
-var query = decodeURI(window.location.toString().split("search/")[1]);
+
+var uriSplit = window.location.href.split("/");
+var query = "";
+var subquery = "";
+var page = 1;
+if(uriSplit.length == 7) {
+    subquery = decodeURI(uriSplit[4]);
+    query = decodeURI(uriSplit[5]);
+    page = uriSplit[6]
+    var nextPage = parseInt(page) + 1;
+    document.querySelector("#next").setAttribute("href", "/search/" + subquery + "/" + query + "/" + nextPage);
+}else{
+    query = decodeURI(uriSplit[4]);
+    page = uriSplit[5];
+    var nextPage = parseInt(page) + 1;
+    document.querySelector("#next").setAttribute("href", "/search/" + query + "/" + nextPage);
+}
 document.querySelector("input").value = query;
 var req = new XMLHttpRequest();
 // document.querySelector("#main").textContent
 req.open("POST", "/search");
-req.send(JSON.stringify({"query": query }));
+req.send(JSON.stringify({"query": query, "subquery": subquery, "page":page}));
 req.onload = function(){
 if (req.readyState === 4) {
     if (req.status === 200) {

@@ -21,16 +21,18 @@ class Routes{
   attachPostRoutes(){
 
   /*************************************************************************
-   * This searches and highlights the query entered into search
+   * This searches the query entered into search
+   * leave subquery empty if youre searching normally
+   * 
+   * {"query":<query>, "subquery":<subqueryname>, "page":<int>}
    *************************************************************************/
     this.webServer.post("/search", (res, req) =>{
       var localPool = this.pool;
       res.onAborted(()=> {
         res.aborted = true;
       });
-
       readJ(res).then(function(response){
-        indexRankAndHighlightQuery(response.query, 10, localPool, res);
+        indexRankAndHighlightQuery(response.query, response.page, response.subquery, localPool, res);
       }).catch(function(err){
         console.log("an error happened " + err);
       })
@@ -104,10 +106,15 @@ class Routes{
 
       /*************************************************************************
       * heres the JSON format that is to be sent to this endpoint
-      * {"username":<string>, "password":<string>}
+      * {"username":<string>, "password":<string>, "stayLoggedIn":<boolean>}
       * 
-      * heres what will be returned
+      * heres what will be returned (and a cookie will be set via header)
       * {"status":<boolean>}
+      * 
+      * store session in SID, req.getHeader("SID"); to retrieve header
+      * req.getHeader("cookie")res.writeHeader("Set-Cookie", "ass");
+      * 
+      * See the github wiki for the SID (session) cookie format explanation
       *************************************************************************/
       this.webServer.post("/account/login", (res,req) =>{
         var localPool = this.pool;
@@ -115,7 +122,7 @@ class Routes{
           res.aborted = true;
         });
         readJ(res).then(function(jsonContent){
-          checkLoginDetails(jsonContent.username, jsonContent.password, localPool, res);
+          checkLoginDetails(jsonContent.username, jsonContent.password, jsonContent.stayloggedin, localPool, res);
         }).catch(function(err){
           if(!res.aborted) res.end("{\"status\":\"authentication failure\"}");
         })

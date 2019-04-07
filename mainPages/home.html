@@ -20,7 +20,7 @@
     <link href="https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container-fluid" style="background-color: #E7FFF9;min-height: 437px;">
+<div class="container-fluid gradientBackground" style="min-height: 437px;">
     <!-- NavBar -->
     <div id="navBar" class="pt-3 row">
         <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-1" style="cursor:default;max-width: 47px;"><svg class="icon0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><defs><style>.cls-1{fill:none;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-3{opacity:0.7;}.cls-2{font-size:30.24px;font-family:OldEnglishTextMT, Old English Text MT;}.cls-3{font-size:11px;font-family:DidactGothic-Regular, Didact Gothic;}</style></defs><title>icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="0.5" y="0.5" width="40" height="40" rx="10"/><text id="navButton" class="cls-2" transform="translate(2 31.47)">T</text><text id="navButton" class="cls-3" transform="translate(24.13 30.47)">.fm</text></g></g></svg></div>
@@ -36,7 +36,8 @@
         <span class="" style="height:fit-content;">Content aggregation <br>at scale<span>
     </div>
     <div class="align-self-start" style="height: fit-content;margin-left: calc(20px + 2vw);">
-        <a class="btn mainButton" style="opacity:1;" href="/explore">Explore Content</a>
+        <a class="btn mainButton" style="opacity:1;" href="/explore">
+            Explore Content<i class="icon ion-md-arrow-forward" style="margin-left:20px;"></i></a>
     </div>
 </div>
 
@@ -83,6 +84,18 @@ input::-ms-clear{display: none;}
     font-weight: 300;
     font-style: normal;
 }
+/* <!-- rgba(0,201,255,0.7), rgba(146,254,157,0.7) 100%) --> */
+.gradientBackground{
+	/* background: linear-gradient(-45deg, #92fe9d, #00c9ff); */
+	background: linear-gradient(-45deg, rgba(0,201,255,0.7), rgba(146,254,157,1));
+	background-size: 400% 400%;
+	-webkit-animation: Gradient 15s ease infinite;
+	-moz-animation: Gradient 15s ease infinite;
+	animation: Gradient 15s ease infinite;
+}
+@-webkit-keyframes Gradient {0% {background-position: 0% 50%}50% {background-position: 100% 50%}100% {background-position: 0% 50%}}
+@-moz-keyframes Gradient {0% {background-position: 0% 50%}50% {background-position: 100% 50%}100% {background-position: 0% 50%}}
+@keyframes Gradient {0% {background-position: 0% 50%}50% {background-position: 100% 50%}100% {background-position: 0% 50%}}
 
 .subHeadline{
     font-family:acumin-pro-extra-condensed, sans-serif;
@@ -107,7 +120,7 @@ input::-ms-clear{display: none;}
     font-size: calc(13px + 1vw);
     padding-top: 0px;
     margin-top: 30px;
-    padding-right: 76px;
+    height:calc(20px + 1.8vw);
     padding-bottom: 2px;
     background-color: rgb(35,31,32);
     color: white;
