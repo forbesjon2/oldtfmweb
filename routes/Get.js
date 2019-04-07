@@ -37,7 +37,7 @@ class Routes{
             res.onAborted(() =>{
                 res.aborted = true;
             });
-            console.log("SS",req.getHeader("cookie"));
+            // console.log("SS",req.getHeader("cookie"));
             if(!res.aborted){
                 res.end(fs.readFileSync("./mainPages/Home.html", {encoding: 'utf-8'}));
             }

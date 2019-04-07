@@ -175,8 +175,10 @@
 
 
 // Event listeners
-function archaic(num){
-    document.querySelector(".floatingTextTimer").textContent = "0:0" + num;
+function strip(html){
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent || tmp.innerText || "";
 }
 
 function calculateElapsed(index, wpm){
@@ -215,7 +217,7 @@ let getTranscription = function(){
 
 getTranscription().then(function(response){
     var path = window.location.href.split("/");
-    document.querySelector("#descContent").textContent = response[0].description;
+    document.querySelector("#descContent").textContent = strip(response[0].description);
     document.querySelector("#podcastName").textContent = decodeURI(path[path.length-2]);
     document.querySelector("#descTitle").textContent = response[0].title;
     document.querySelector("#d8").textContent = "Date: " + response[0].date.split("T")[0];
