@@ -8,7 +8,6 @@ class Routes{
         this.webServer = webServer;
         this.pool = pool;
     }
-
     /**********************************************************************
      * This covers the majority of the primary and secondary GET routes.
      * This does not include API endpoints so all routes will involve
@@ -39,7 +38,49 @@ class Routes{
             });
             // console.log("SS",req.getHeader("cookie"));
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Home.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Home.html", {encoding: 'utf-8'}));
+            }
+        });
+        
+        
+        //PWA route
+        this.webServer.get("/sw.js", (res,req) =>{
+            res.onAborted(() =>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.writeHeader("Content-Type", "application/javascript");
+                res.end(fs.readFileSync("./mainPages/PWA/sw.js", {encoding: 'utf-8'}));
+            }
+        });
+
+        //PWA route
+        this.webServer.get("/manifest.json", (res,req) =>{
+            res.onAborted(() =>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.writeHeader("Content-Type", "application/json");
+                res.end(fs.readFileSync("./mainPages/PWA/manifest.json", {encoding: 'utf-8'}));
+            }
+        });
+        //PWA route
+        this.webServer.get("/robots.txt", (res,req) =>{
+            res.onAborted(() =>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.writeHeader("Content-Type", "application/json");
+                res.end(fs.readFileSync("./mainPages/PWA/manifest.json", {encoding: 'utf-8'}));
+            }
+        });
+
+        this.webServer.get("/favicon.ico", (res,req) =>{
+            res.onAborted(() =>{
+                res.aborted = true;
+            });
+            if(!res.aborted){
+                res.end(fs.readFileSync("./mainPages/Icons/128.png", {encoding: 'utf-8'}));
             }
         });
 
@@ -48,16 +89,17 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/About.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/About.html", {encoding: 'utf-8'}));
             }
         });
+
 
         this.webServer.get("/explore", (res,req) =>{
             res.onAborted(()=> {
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Explore.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Explore.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -67,7 +109,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Contact.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Contact.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -76,9 +118,58 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Account.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Account.html", {encoding: 'utf-8'}));
             }
         });
+
+
+
+
+
+
+
+
+
+//______________________________________ICON SPAM ROUTES_____________________________________________________
+this.webServer.get("/icons/512.png", (res,req) =>{
+    res.onAborted(()=> {
+        res.aborted = true;
+    });
+    res.writeHeader("Content-Type", "image/png");
+    if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/512.png", {encoding: 'utf-8'}));
+});
+this.webServer.get("/icons/192.png", (res,req) =>{
+    res.onAborted(()=> {
+        res.aborted = true;
+    });
+    res.writeHeader("Content-Type", "image/png");
+    if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/192.png", {encoding: 'utf-8'}));
+});
+this.webServer.get("/icons/152.png", (res,req) =>{
+    res.onAborted(()=> {
+        res.aborted = true;
+    });
+    res.writeHeader("Content-Type", "image/png");
+    if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/152.png", {encoding: 'utf-8'}));
+});
+this.webServer.get("/icons/144.png", (res,req) =>{
+    res.onAborted(()=> {
+        res.aborted = true;
+    });
+    res.writeHeader("Content-Type", "image/png");
+    if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/144.png", {encoding: 'utf-8'}));
+});
+this.webServer.get("/icons/128.png", (res,req) =>{
+    res.onAborted(()=> {
+        res.aborted = true;
+    });
+    res.writeHeader("Content-Type", "image/png");
+    if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/128.png", {encoding: 'utf-8'}));
+});
+
+
+
+
 
 
 
@@ -97,7 +188,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Search.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Search.html", {encoding: 'utf-8'}));
             }
         })
 
@@ -111,7 +202,7 @@ class Routes{
                 res.onAborted = true;
             });
             if(!res.onAborted){
-                res.end(fs.readFileSync("./mainPages/Show.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Show.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -120,7 +211,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/ExploreSecondary.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/ExploreSecondary.html", {encoding: 'utf-8'}));
             }
         });
 
@@ -130,7 +221,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/ExploreTertiary.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/ExploreTertiary.html", {encoding: 'utf-8'}));
             }
         });
         
@@ -144,7 +235,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Transcription.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Transcription.html", {encoding: 'utf-8'}));
             }
         })
 
@@ -161,7 +252,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Search.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Search.html", {encoding: 'utf-8'}));
             }
         })
         return this.webServer;

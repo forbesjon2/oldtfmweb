@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -7,7 +7,7 @@
     
     <!-- Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,13 @@
     <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet">
     <link rel="stylesheet" href="https://use.typekit.net/eif1eeg.css">
-
+    
+    <script src="./sw.js"></script>
+    <meta name="theme-color" content="#92fe9d"/>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="svg" href="/Image/512.png">
+    <meta name="Description" content="transcript.fm homepage">
+    
     <!-- Icon -->
     <link href="https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css" rel="stylesheet">
 </head>
@@ -58,12 +64,12 @@
     </div>
 </div>
 
-<div style="padding:0px;margin:0px;margin-left: calc(20px + 2vw);padding-left:15px;margin-bottom: 10px;">
+<!-- <div style="padding:0px;margin:0px;margin-left: calc(20px + 2vw);padding-left:15px;margin-bottom: 10px;">
     <a class="bottomNav" href="/help">Help</a>
     <a class="bottomNav" href="/contact">Contact</a>
     <a class="bottomNav" href="/privacypolicy">Privacy Policy</a>
     <a class="bottomNav" href="/sendfeedback">Send Feedback</a>
-</div>
+</div> -->
 <!-- CSS -->
 <style>
 .noTextSelect{-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none; cursor: default;}
@@ -157,33 +163,10 @@ input::-ms-clear{display: none;}
 
 <!-- Vue -->
 <script>
-function toggleSearch(event){
-    document.querySelector("#navBar").classList.add("invisible");
-    document.querySelector("i").classList.add("selectedIcon");
-    var input = document.querySelector("input");
-    input.classList.add("selectedInput");
-    // input.textContent = '';
-}
-function enterKeyPress(event){
-    if(event.keyCode == 13 || event.key == "Enter" || event == "SearchIconClick"){
-        window.location.href = "/search/" + document.querySelector("input").value;
-    }
-}
-
-
-function search(query){
-    
-    window.location.href = "/search/" + document.querySelector("input").value;
-}
-
-function toggleEndSearch(event){
-    document.querySelector("#navBar").classList.remove("invisible");
-    document.querySelector("i").classList.remove("selectedIcon");
-    document.querySelector("input").classList.remove("selectedInput");
-}
-// window.setInterval(function(){
-//     location.reload();
-// }, 1500);
+if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(function() {
+        console.log('Service Worker Registered');
+    }).catch(function(err){console.log("service worker issue" + err);});}
 </script>
 </body>
 </html>
