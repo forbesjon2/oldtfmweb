@@ -128,52 +128,6 @@ class Routes{
 
 
 
-
-
-// //______________________________________ICON SPAM ROUTES_____________________________________________________
-// this.webServer.get("/icons/512.png", (res,req) =>{
-//     res.onAborted(()=> {
-//         res.aborted = true;
-//     });
-//     res.writeHeader("Content-Type", "image/png");
-//     if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/512.png", {encoding: 'utf-8'}));
-// });
-// this.webServer.get("/icons/192.png", (res,req) =>{
-//     res.onAborted(()=> {
-//         res.aborted = true;
-//     });
-//     res.writeHeader("Content-Type", "image/png");
-//     if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/192.png", {encoding: 'utf-8'}));
-// });
-// this.webServer.get("/icons/152.png", (res,req) =>{
-//     res.onAborted(()=> {
-//         res.aborted = true;
-//     });
-//     res.writeHeader("Content-Type", "image/png");
-//     if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/152.png", {encoding: 'utf-8'}));
-// });
-// this.webServer.get("/icons/144.png", (res,req) =>{
-//     res.onAborted(()=> {
-//         res.aborted = true;
-//     });
-//     res.writeHeader("Content-Type", "image/png");
-//     if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/144.png", {encoding: 'utf-8'}));
-// });
-// this.webServer.get("/icons/128.png", (res,req) =>{
-//     res.onAborted(()=> {
-//         res.aborted = true;
-//     });
-//     res.writeHeader("Content-Type", "image/png");
-//     if(!res.aborted) res.end(fs.readFileSync("./mainPages/Icons/128.png", {encoding: 'utf-8'}));
-// });
-
-
-
-
-
-
-
-
 //______________________________________SECONDARY ROUTES_____________________________________________________
 
         /**********************************************************************
