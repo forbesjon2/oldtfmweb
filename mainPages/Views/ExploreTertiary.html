@@ -11,6 +11,10 @@
     <!-- Didact Gothic -->
     <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet"> 
+    
+    <link rel="icon" type="png" href="https://www.dropbox.com/s/qhie7cmrf7ctckj/192.png?dl=1">
+    
+    
     <!-- Adobe acumin -->
     <link rel="stylesheet" href="https://use.typekit.net/eif1eeg.css">
     <!-- Icon -->
@@ -198,7 +202,7 @@ let init = function(podcasts, description){
     for(var item in podcasts){
         var colDiv = document.createElement("div");
         colDiv.setAttribute("class", "row");
-        var linkBefore = '<a href="'+ path + '/' +  podcasts[item]["title"].replace(/\//g,"-") + '"  class="showLink stretched-link">';
+        var linkBefore = '<a href="'+ path + '/' +  podcasts[item]["title"].replace(/\//g,"-").replace(/#/g,"-") + '"  class="showLink stretched-link">';
         colDiv.innerHTML = '<div id="cContent" class="col sl">' + linkBefore + podcasts[item]["title"] + '</a></div>'
             + '<div id="cContent" class="col">' + linkBefore + podcasts[item]["date"].split("T")[0] + '</a></div>'
             + '<div id="cContent" class="col">' + linkBefore + Math.floor(podcasts[item]["duration"] / 60) + ' minutes</a></div>';

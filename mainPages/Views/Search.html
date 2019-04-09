@@ -14,6 +14,13 @@
     <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro" rel="stylesheet">
+    
+
+    <meta name="theme-color" content="#92fe9d"/>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="png" href="https://www.dropbox.com/s/qhie7cmrf7ctckj/192.png?dl=1">
+    <meta name="Description" content="transcript.fm search page">
+    
     <!-- Icon -->
     <link href="https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css" rel="stylesheet">
 </head>
@@ -90,7 +97,7 @@ if (req.readyState === 4) {
         for(var item in qr){
             var newdiv = document.createElement('div');
             newdiv.setAttribute("style","margin-left:8%;")
-            newdiv.innerHTML ='<div class="queryInfo row"><a class="qTitle" href="/explore/Itunes%20top%20100%20podcasts/' + encodeURI(qr[item].podcastname) + '/' + encodeURI(qr[item].title).replace(/\//g,"-") + '">' + qr[item].title + '</a><div class="qDate d-none d-md-block">September 22, 2017</div></div><div class="queryinfo"><div class="qPodcast">' + qr[item].podcastname + '</div></div><div class="qDescription">' + qr[item].ts_headline + '</div>';
+            newdiv.innerHTML ='<div class="queryInfo row"><a class="qTitle" href="/explore/Itunes%20top%20100%20podcasts/' + encodeURI(qr[item].podcastname) + '/' + encodeURI(qr[item].title).replace(/\//g,"-").replace(/#/g, "-") + '">' + qr[item].title + '</a><div class="qDate d-none d-md-block">September 22, 2017</div></div><div class="queryinfo"><div class="qPodcast">' + qr[item].podcastname + '</div></div><div class="qDescription">' + qr[item].ts_headline + '</div>';
             // var divK = document.querySelector(".one");
             var divParent = document.querySelector("#mc");
             divParent.appendChild(newdiv);
