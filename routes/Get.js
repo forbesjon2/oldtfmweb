@@ -189,7 +189,7 @@ class Routes{
                 res.aborted = true;
             });
             if(!res.aborted){
-                res.end(fs.readFileSync("./mainPages/Views/Transcription.html", {encoding: 'utf-8'}));
+                res.end(fs.readFileSync("./mainPages/Views/Placeholder.html", {encoding: 'utf-8'}));
             }
         })
 
