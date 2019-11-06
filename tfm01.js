@@ -13,7 +13,11 @@ const pool = new Pool({
 })
 
 
-var app = uWS.App();
+var app = uWS.SSLApp({
+	key_file_name: '/etc/letsencrypt/live/ca2ie.net/privkey.pem',
+	cert_file_name: '/etc/letsencrypt/live/ca2ie.net/cert.pem',
+	passphrase:'1234'
+});
 
 app = new Get.Routes(app, pool).attachGetRoutes();
 app = new Get.Routes(app, pool).attachGetAPIRoutes();
@@ -22,10 +26,10 @@ app = new Post.Routes(app, pool).attachPostAccountRoutes();
 app = new Post.Routes(app, pool).attachPostRoutes();
 
 
-
-app.listen(3000, (token) => {
+const PORT = 5000;
+app.listen(PORT, (token) => {
     if(token){
-      console.log("listening on 3000");
+      console.log("listening on port " + PORT);
     }else{
       console.log("idk ");
     }

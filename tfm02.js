@@ -22,7 +22,7 @@ app = new Post.Routes(app, pool).attachPostAccountRoutes();
 app = new Post.Routes(app, pool).attachPostRoutes();
 
 
-const PORT = 80;
+const PORT = 5001;
 app.listen(PORT, (token) => {
     if(token){
       console.log("listening on port " + PORT);
