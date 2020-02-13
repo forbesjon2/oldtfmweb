@@ -14,8 +14,8 @@ const pool = new Pool({
 
 
 var app = uWS.SSLApp({
-	key_file_name: '/etc/letsencrypt/live/ca2ie.net/privkey.pem',
-	cert_file_name: '/etc/letsencrypt/live/ca2ie.net/cert.pem',
+	key_file_name: '/etc/letsencrypt/live/transcript.fm/privkey.pem',
+	cert_file_name: '/etc/letsencrypt/live/transcript.fm/cert.pem',
 	passphrase:'1234'
 });
 

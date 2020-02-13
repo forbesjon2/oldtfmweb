@@ -1,0 +1,38 @@
+# Haproxy cfg
+vim /etc/haproxy/haproxy.cfg
+
+# check validity of haproxy config file 
+haproxy -c -f /etc/haproxy/haproxy.cfg
+
+# haproxy log
+/var/log/haproxy.log
+
+
+
+
+# to renew the cert..
+certbot renew
+# then run the one script
+
+# cert location
+/etc/letsencrypt/live/transcript.fm/
+
+# create a cert (then paste list of domains)
+sudo certbot certonly --standalone --agree-tos --email forbesjon2@gmail.com
+
+
+# see ip of docker container
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' container_name_or_id
+
+
+
+
+# transcript stats
+10,963 podcasts transcribed
+272.79 days
+
+
+
+
+# BOINC stuff. this server runs IBM world community grid by default
+sudo systemctl start boinc-client
